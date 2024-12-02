@@ -1,0 +1,108 @@
+commands:
+  - name: "Check Ubuntu 22.04"
+    command: "lsb_release -a"
+    expected: "Ubuntu 22.04"
+
+  - name: "SUDO is installed"
+    command: "sudo"
+    expected: "usage: sudo -h"
+
+  - name: "MAKE is installed"
+    command: "make"
+    not_expected: "make: command not found"
+
+  - name: "JQ is installed"
+    command: "jq --version"
+    expected: "jq-1"
+
+  - name: "VIM is installed"
+    command: "vim --v"
+    expected: "VIM - Vi IMproved"
+
+  - name: "YARN Dependency Manager exists"
+    command: "echo SVRUNIT: $(yarn -v)"
+    expected: "SVRUNIT: 1."
+
+  - name: "zstd is installed"
+    command: "zstd --version"
+    expected: "*** zstd command line interface 64-bits v1.4.8, by Yann Collet ***"
+
+  - name: "Permission: Verify 'www-data' has no shell login"
+    command: "cat /etc/passwd"
+    expected: "www-data:x:33:33:www-data:/var/www:/usr/sbin/nologin"
+
+  - name: "Permission: Verify 'dockware' user is alias for 'www-data'"
+    command: "cat /etc/passwd"
+    expected: "dockware:x:33:33:,,,:/var/www:/bin/bash"
+
+  - name: "Default working directory is /var/www/html"
+    command: "pwd"
+    expected: "/var/www/html"
+
+  - name: "Cron is running"
+    command: "service cron status"
+    expected: "cron is running"
+
+  - name: "Supervisor is installed"
+    command: "echo SVRUNIT: $(supervisord --version)"
+    expected: "SVRUNIT: 4.2."
+
+  - name: "Supervisor is not running"
+    command: "sudo service supervisor status"
+    expected: "supervisord is  not running"
+
+  - name: "GIT is installed"
+    command: "git --version"
+    expected: "git version 2.34"
+
+  - name: "GIT LFS is installed"
+    command: "git lfs --version"
+    expected: "git-lfs/3.0.2 (GitHub"
+
+  - name: "Ubuntu timezone Europe/Berlin"
+    command: "sudo cat /etc/timezone"
+    expected: "Europe/Berlin"
+
+  - name: "PHP Timezone is UTC (for now)"
+    command: "php -r \"echo date_default_timezone_get();\""
+    expected: "Europe/Berlin"
+
+  - name: "PHP FPM Service is running"
+    command: "sudo service php8.4-fpm status"
+    expected: "is running"
+
+file_exists:
+
+  - name: "SSH Private Key exists"
+    file: "/var/www/.ssh/id_rsa"
+    expected: 1
+
+  - name: "SSH Public Key exists"
+    file: "/var/www/.ssh/id_rsa.pub"
+    expected: 1
+
+  - name: "SSL Certificates exists"
+    file: "/etc/apache2/ssl/server.crt"
+    expected: 1
+
+  - name: "Version Meta file exists"
+    file: " /dockware/version.txt"
+    expected: 1
+
+  - name: "Copyright Meta file exists"
+    file: " /dockware/copyright.txt"
+    expected: 1
+
+  - name: "Build Date Meta file exists"
+    file: " /dockware/build-date.txt"
+    expected: 1
+
+file_content:
+
+  - name: "Apache sites.conf FPM placeholder is replaced"
+    file: "/etc/apache2/sites-enabled/000-default.conf"
+    not_expected: "__dockware_php_version__"
+
+  - name: "Apache sites.conf DocRoot placeholder is replaced"
+    file: "/etc/apache2/sites-enabled/000-default.conf"
+    not_expected: "__dockware_apache_docroot__"

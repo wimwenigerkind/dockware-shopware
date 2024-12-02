@@ -1,0 +1,19 @@
+commands:
+
+  - name: "Xdebug v2.x"
+    command: "php -v"
+    expected: "with Xdebug v2."
+
+  - name: "Xdebug not Corrupted"
+    command: "php -v"
+    not_expected: "zend_mm_heap corrupted"
+
+  - name: "Test if 20-xdebug.ini is existing"
+    command: "if php --ini | grep -i xdebug > /dev/null; then echo 'existing-yes'; else echo 'existing-no'; fi"
+    expected: "existing-yes"
+
+php_module:
+
+  - name: "PHP Module: Xdebug"
+    module: "xdebug"
+

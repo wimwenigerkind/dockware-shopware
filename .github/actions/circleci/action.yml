@@ -1,0 +1,22 @@
+name: 'Start Circle CI Release'
+description: "Triggers the CircleCI pipeline"
+
+inputs:
+  CIRCLECI_KEY:
+    description: "CircleCI token"
+    required: true
+  VERSION:
+    description: "The version that should be released"
+    required: true
+  SET_LATEST:
+    description: "Whether its the latest or not"
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+
+    - name: Trigger CircleCI
+      shell: bash
+      run: |
+        cd .circleci && sh run-img.sh ${{ inputs.CIRCLECI_KEY }} ${{ inputs.VERSION }} ${{ inputs.SET_LATEST }}

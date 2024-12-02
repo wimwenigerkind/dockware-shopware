@@ -1,0 +1,5 @@
+commands:
+
+  - name: "Supervisor is running"
+    command: "sudo service supervisor status"
+    expected: "supervisord is running"

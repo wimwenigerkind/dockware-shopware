@@ -1,0 +1,12 @@
+
+command:
+
+  - name: "Tideways Daemon is installed"
+    command: "sudo tideways-daemon --version"
+    expected: "1.9."
+
+php_module:
+
+  -  name: "PHP Module: Tideways"
+     module: "tideways"
+

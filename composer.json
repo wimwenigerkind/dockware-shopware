@@ -1,0 +1,6 @@
+{
+  "name": "dockware/flex",
+  "require-dev": {
+    "svrunit/svrunit": "dev-main"
+  }
+}

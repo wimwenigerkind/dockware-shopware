@@ -1,0 +1,9 @@
+commands:
+
+  - name: "custom ssh user exists"
+    command: "sudo cat /etc/passwd"
+    expected: "foo:x:33:33:,,,:/var/www:/bin/bash"
+
+  - name: "custom ssh user has an encrypted password in the shadow file"
+    command: "sudo cat /etc/shadow"
+    expected: "foo:"

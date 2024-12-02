@@ -1,0 +1,26 @@
+apt-get install -y  php5.6-fpm \
+                    php5.6-apc \
+                    php5.6-apcu \
+                    php5.6-curl \
+                    php5.6-cli \
+                    php5.6-gd \
+                    php5.6-json \
+                    php5.6-ldap \
+                    php5.6-mysql \
+                    php5.6-pgsql \
+                    php5.6-gettext \
+                    php5.6-intl \
+                    php5.6-xml \
+                    php5.6-mysql \
+                    php5.6-mbstring \
+                    php5.6-zip \
+                    php5.6-soap \
+                    php5.6-memcached \
+                    php5.6-redis \
+                    php5.6-bcmath \
+                    php5.6-imap \
+                    php5.6-ssh2 \
+                    php5.6-geoip \
+                    php5.6-amqp \
+                    php5.6-xdebug \
+                    php5.6-mongo

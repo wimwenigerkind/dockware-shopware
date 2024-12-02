@@ -1,0 +1,13 @@
+
+file_exists:
+
+  - name: "Tideways Daemon started and log file is created"
+    file: "/var/log/tideways/daemon.log"
+    expected: 1
+
+commands:
+
+  - name: "Tideways Daemon is running"
+    command: "ps aux | grep tideways-daemon"
+    expected: "0:00 grep tideways-daemon"
+

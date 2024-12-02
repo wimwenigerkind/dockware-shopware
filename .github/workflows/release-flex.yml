@@ -1,0 +1,31 @@
+name: Release Image
+run-name: dockware/flex:${{ github.event.inputs.version }}, latest ${{ github.event.inputs.setLatest }}
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Image Version'
+        required: true
+      setLatest:
+        description: 'Set Latest Tag'
+        type: boolean
+        required: true
+
+jobs:
+
+  on-push:
+    name: Release Image
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Clone Code
+        uses: actions/checkout@v4
+
+      - name: Release Version ${{ github.event.inputs.swVersion }}
+        uses: ./.github/actions/circleci
+        with:
+          VERSION: ${{ github.event.inputs.version }}
+          SET_LATEST: false
+          # -------------------------------------------
+          CIRCLECI_KEY: ${{ secrets.CIRCLE_CI_TOKEN }}
