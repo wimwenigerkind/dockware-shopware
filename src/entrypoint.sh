@@ -115,7 +115,7 @@ if [ $RECOVERY_MODE = 0 ]; then
         sudo rm -f "$file"
     fi
     sudo chown -R mysql:mysql /var/lib/mysql /var/run/mysqld
-    #sudo service mysql start;
+    sudo service mysql start;
 
     # --------------------------------------------------
     # APACHE
