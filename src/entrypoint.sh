@@ -109,6 +109,14 @@ if [ $RECOVERY_MODE = 0 ]; then
         echo "-----------------------------------------------------------"
     fi
 
+    echo "DOCKWARE: starting MySQL...."
+    file="/var/run/mysqld/mysqld.sock.lock"
+    if [ -f "$file" ] ; then
+        sudo rm -f "$file"
+    fi
+    sudo chown -R mysql:mysql /var/lib/mysql /var/run/mysqld
+    #sudo service mysql start;
+
     # --------------------------------------------------
     # APACHE
     # first set the correct doc root, because we need it for the php switch below

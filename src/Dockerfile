@@ -195,11 +195,15 @@ RUN echo "id:apache" && \
 # -------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 RUN echo "id:mysql" && \
+    cp /dockware/tmp/config/mysql/my.cnf /etc/mysql/my.cnf && \
+    chmod 0444 /etc/mysql/my.cnf  && \
     # -------------------------------------
     mkdir -p /var/log/mysql &&  \
     chgrp -R www-data /var/log/mysql && \
+    # -------------------------------------
     usermod -d /var/lib/mysql/ mysql  && \
-    chmod 0444 /etc/mysql/my.cnf  && \
+    mkdir -p /var/libs/mysql &&  \
+    chgrp -R mysql /var/log/mysql && \
     # -------------------------------------
     service mysql start && \
     # create ether user for % and also localhost as otherwise you could have to connect to 127.0.0.1 and not localhost as mysql treats this different
@@ -242,9 +246,9 @@ RUN echo "id:node" && \
 ##  SHOPWARE INSTALLATION
 ## ***********************************************************************
 
-RUN echo "id:shopware" && \
-    cd /dockware/tmp/scripts && bash install_shopware.sh && \
-    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* \
+#RUN echo "id:shopware" && \
+#    cd /dockware/tmp/scripts && bash install_shopware.sh && \
+#    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* \
 
 
 ## ***********************************************************************

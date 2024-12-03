@@ -71,6 +71,10 @@ commands:
     command: "sudo service php8.4-fpm status"
     expected: "is running"
 
+  - name: "MySQL Service is running"
+    command: "sudo service mysql status"
+    expected: "MySQL is running"
+
 file_exists:
 
   - name: "SSH Private Key exists"

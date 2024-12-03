@@ -2,7 +2,7 @@
 
     <testsuites>
 
-        <testsuite name="Default Checks" group="core" dockerImage="dockware/flex:{{tag}}">
+        <testsuite name="Default Checks" group="core" dockerImage="dockware/dev:{{tag}}">
             <directory>./tests/defaults</directory>
             <directory>./tests/node/v22</directory>
             <directory>./tests/php/php8.4</directory>
@@ -13,51 +13,51 @@
 
         <!-- FEATURES -->
 
-        <testsuite name="Recovery Mode works" group="features" dockerImage="dockware/flex:{{tag}}" dockerEnv="RECOVERY_MODE=1">
+        <testsuite name="Recovery Mode works" group="features" dockerImage="dockware/dev:{{tag}}" dockerEnv="RECOVERY_MODE=1">
             <directory>./tests/features/recovery-mode</directory>
         </testsuite>
 
-        <testsuite name="Custom SSH User" group="features" dockerImage="dockware/flex:{{tag}}" dockerEnv="SSH_USER=foo,SSH_PWD=bar">
+        <testsuite name="Custom SSH User" group="features" dockerImage="dockware/dev:{{tag}}" dockerEnv="SSH_USER=foo,SSH_PWD=bar">
             <directory>./tests/features/custom-ssh</directory>
         </testsuite>
 
-        <testsuite name="Filebeat ON" group="features" dockerImage="dockware/flex:{{tag}}" dockerEnv="FILEBEAT_ENABLED=1">
+        <testsuite name="Filebeat ON" group="features" dockerImage="dockware/dev:{{tag}}" dockerEnv="FILEBEAT_ENABLED=1">
             <directory>./tests/features/filebeat-on</directory>
         </testsuite>
 
-        <testsuite name="Supervisor ON" group="features" dockerImage="dockware/flex:{{tag}}" dockerEnv="SUPERVISOR_ENABLED=1">
+        <testsuite name="Supervisor ON" group="features" dockerImage="dockware/dev:{{tag}}" dockerEnv="SUPERVISOR_ENABLED=1">
             <directory>./tests/features/supervisor-on</directory>
         </testsuite>
 
-        <testsuite name="Tideways ON" group="features" dockerImage="dockware/flex:{{tag}}" dockerEnv="TIDEWAYS_KEY=abc">
+        <testsuite name="Tideways ON" group="features" dockerImage="dockware/dev:{{tag}}" dockerEnv="TIDEWAYS_KEY=abc">
             <directory>./tests/features/tideways-on</directory>
         </testsuite>
 
-        <testsuite name="Timezone can be set" group="features" dockerImage="dockware/flex:{{tag}}" dockerEnv="TZ=Asia/Tokyo">
+        <testsuite name="Timezone can be set" group="features" dockerImage="dockware/dev:{{tag}}" dockerEnv="TZ=Asia/Tokyo">
             <directory>./tests/features/timezone</directory>
         </testsuite>
 
-        <testsuite name="XDebug OFF" group="features" dockerImage="dockware/flex:{{tag}}" dockerEnv="XDEBUG_ENABLED=0">
+        <testsuite name="XDebug OFF" group="features" dockerImage="dockware/dev:{{tag}}" dockerEnv="XDEBUG_ENABLED=0">
             <directory>./tests/features/xdebug-off</directory>
         </testsuite>
 
-        <testsuite name="Command Runner" group="features" dockerImage="dockware/flex:{{tag}}" dockerCommandRunner="true">
+        <testsuite name="Command Runner" group="features" dockerImage="dockware/dev:{{tag}}" dockerCommandRunner="true">
             <directory>./tests/features/command-runner</directory>
         </testsuite>
 
         <!-- NODE -->
 
-        <testsuite name="ENV - Node Version Switch to 22" group="node" dockerImage="dockware/flex:{{tag}}" dockerEnv="NODE_VERSION=22">
+        <testsuite name="ENV - Node Version Switch to 22" group="node" dockerImage="dockware/dev:{{tag}}" dockerEnv="NODE_VERSION=22">
             <directory>./tests/node/v22</directory>
         </testsuite>
 
-        <testsuite name="ENV - Node Version Switch to 20" group="node" dockerImage="dockware/flex:{{tag}}" dockerEnv="NODE_VERSION=20">
+        <testsuite name="ENV - Node Version Switch to 20" group="node" dockerImage="dockware/dev:{{tag}}" dockerEnv="NODE_VERSION=20">
             <directory>./tests/node/v20</directory>
         </testsuite>
 
         <!-- PHP -->
 
-        <testsuite name="PHP 8.4, XDebug ON" group="php" dockerImage="dockware/flex:{{tag}}" dockerEnv="PHP_VERSION=8.4,XDEBUG_ENABLED=1">
+        <testsuite name="PHP 8.4, XDebug ON" group="php" dockerImage="dockware/dev:{{tag}}" dockerEnv="PHP_VERSION=8.4,XDEBUG_ENABLED=1">
             <directory>./tests/php/php8.4</directory>
             <directory>./tests/tools/xdebug/xdebug3</directory>
             <directory>./tests/tools/composer/v2</directory>
@@ -65,7 +65,7 @@
             <directory>./tests/features/xdebug-on</directory>
         </testsuite>
 
-        <testsuite name="PHP 8.3, XDebug ON" group="php" dockerImage="dockware/flex:{{tag}}" dockerEnv="PHP_VERSION=8.3,XDEBUG_ENABLED=1">
+        <testsuite name="PHP 8.3, XDebug ON" group="php" dockerImage="dockware/dev:{{tag}}" dockerEnv="PHP_VERSION=8.3,XDEBUG_ENABLED=1">
             <directory>./tests/php/php8.3</directory>
             <directory>./tests/tools/xdebug/xdebug3</directory>
             <directory>./tests/tools/composer/v2</directory>
@@ -73,7 +73,7 @@
             <directory>./tests/features/xdebug-on</directory>
         </testsuite>
 
-        <testsuite name="PHP 8.2, XDebug ON" group="php" dockerImage="dockware/flex:{{tag}}" dockerEnv="PHP_VERSION=8.2,XDEBUG_ENABLED=1">
+        <testsuite name="PHP 8.2, XDebug ON" group="php" dockerImage="dockware/dev:{{tag}}" dockerEnv="PHP_VERSION=8.2,XDEBUG_ENABLED=1">
             <directory>./tests/php/php8.2</directory>
             <directory>./tests/tools/xdebug/xdebug3</directory>
             <directory>./tests/tools/composer/v2</directory>
@@ -81,7 +81,7 @@
             <directory>./tests/features/xdebug-on</directory>
         </testsuite>
 
-        <testsuite name="PHP 8.1, XDebug ON" group="php" dockerImage="dockware/flex:{{tag}}" dockerEnv="PHP_VERSION=8.1,XDEBUG_ENABLED=1">
+        <testsuite name="PHP 8.1, XDebug ON" group="php" dockerImage="dockware/dev:{{tag}}" dockerEnv="PHP_VERSION=8.1,XDEBUG_ENABLED=1">
             <directory>./tests/php/php8.1</directory>
             <directory>./tests/tools/xdebug/xdebug3</directory>
             <directory>./tests/tools/composer/v2</directory>
@@ -89,7 +89,7 @@
             <directory>./tests/features/xdebug-on</directory>
         </testsuite>
 
-        <testsuite name="PHP 8.0, XDebug ON" group="php" dockerImage="dockware/flex:{{tag}}" dockerEnv="PHP_VERSION=8.0,XDEBUG_ENABLED=1">
+        <testsuite name="PHP 8.0, XDebug ON" group="php" dockerImage="dockware/dev:{{tag}}" dockerEnv="PHP_VERSION=8.0,XDEBUG_ENABLED=1">
             <directory>./tests/php/php8.0</directory>
             <directory>./tests/tools/xdebug/xdebug3</directory>
             <directory>./tests/tools/composer/v2</directory>
@@ -97,7 +97,7 @@
             <directory>./tests/features/xdebug-on</directory>
         </testsuite>
 
-        <testsuite name="PHP 7.4, XDebug ON" group="php" dockerImage="dockware/flex:{{tag}}" dockerEnv="PHP_VERSION=7.4,XDEBUG_ENABLED=1">
+        <testsuite name="PHP 7.4, XDebug ON" group="php" dockerImage="dockware/dev:{{tag}}" dockerEnv="PHP_VERSION=7.4,XDEBUG_ENABLED=1">
             <directory>./tests/php/php7.4</directory>
             <directory>./tests/tools/xdebug/xdebug3</directory>
             <directory>./tests/tools/composer/v2</directory>
@@ -105,11 +105,11 @@
             <directory>./tests/features/xdebug-on</directory>
         </testsuite>
 
-        <testsuite name="Restart PHP" group="php" dockerImage="dockware/flex:{{tag}}">
+        <testsuite name="Restart PHP" group="php" dockerImage="dockware/dev:{{tag}}">
             <directory>./tests/features/restart-php</directory>
         </testsuite>
 
-        <testsuite name="Switch PHP Version" group="php" dockerImage="dockware/flex:{{tag}}">
+        <testsuite name="Switch PHP Version" group="php" dockerImage="dockware/dev:{{tag}}">
             <directory>./tests/features/switch-php</directory>
         </testsuite>
 
