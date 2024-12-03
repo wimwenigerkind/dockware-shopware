@@ -102,11 +102,11 @@ RUN echo "id:basics" && \
             rsync \
             supervisor \
             jpegoptim \
-            mysql-client \
             git git-lfs \
             apache2 libapache2-mod-fcgid  \
             tideways-php tideways-daemon \
             mysql-server-8.0 \
+            mysql-client \
             filebeat && \
     mkdir /var/run/sshd && \
     ln -fs /usr/share/zoneinfo/Europe/Berlin /etc/localtime && echo "${TZ}" > /etc/timezone && \
@@ -195,20 +195,18 @@ RUN echo "id:apache" && \
 # -------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 RUN echo "id:mysql" && \
-    cp /dockware/tmp/config/mysql/my.cnf /etc/mysql/my.cnf && \
-    chmod 600 /etc/mysql/my.cnf && \
-    # set requires permissions
-    usermod -d /var/lib/mysql/ mysql && \
-    mkdir -p /var/log/mysql && \
-    sudo mkdir -p /var/run/mysqld && \
+    # -------------------------------------
+    mkdir -p /var/log/mysql &&  \
     chgrp -R www-data /var/log/mysql && \
-    chown mysql:mysql /var/lib/mysql -R && \
-    chown mysql:mysql /var/run/mysqld -R && \
-    mysql start && \
-    #creat ethe user for % and also localhost as otherwise you could have to connect to 127.0.0.1 and not localhost as mysql treats this different
-   # sudo mysql --user=root --password=root -e "ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'root';FLUSH PRIVILEGES;use mysql;select user from user;" && \
-   # sudo mysql --user=root --password=root -e "CREATE USER 'root'@'%' IDENTIFIED WITH mysql_native_password BY 'root';GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' WITH GRANT OPTION;FLUSH PRIVILEGES;use mysql;select user from user;" && \
-    service mysql stop
+    usermod -d /var/lib/mysql/ mysql  && \
+    chmod 0444 /etc/mysql/my.cnf  && \
+    # -------------------------------------
+    service mysql start && \
+    # create ether user for % and also localhost as otherwise you could have to connect to 127.0.0.1 and not localhost as mysql treats this different
+    sudo mysql --user=root --password=root -e "ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'root';FLUSH PRIVILEGES;use mysql;select user from user;" && \
+    sudo mysql --user=root --password=root -e "CREATE USER 'root'@'%' IDENTIFIED WITH mysql_native_password BY 'root';GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' WITH GRANT OPTION;FLUSH PRIVILEGES;use mysql;select user from user;" && \
+    service mysql stop && \
+    rm -rf /var/lib/mysql/ib*
 
 
 # -------------------------------------------------------------------------------------------------------------------------------------------------------------------------
