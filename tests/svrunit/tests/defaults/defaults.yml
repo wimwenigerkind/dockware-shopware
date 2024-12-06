@@ -73,7 +73,7 @@ commands:
 
   - name: "MySQL Service is running"
     command: "sudo service mysql status"
-    expected: "MySQL is running"
+    expected: "Slow queries:"
 
 file_exists:
 
