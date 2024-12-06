@@ -5,7 +5,7 @@ FROM ubuntu:22.04
 LABEL title="Dockware dev:latest" \
       maintainer="dasistweb GmbH"
 
-ARG IMAGE_VERSION
+ARG VERSION
 
 ## ***********************************************************************
 ##  IMAGE VARIABLES
@@ -43,14 +43,14 @@ COPY --chmod=0755 entrypoint.sh /entrypoint.sh
 # these are identifier values
 # that are read and shown to the user about this image
 RUN mkdir -p /dockware && \
-    echo "${IMAGE_VERSION}" > /dockware/version.txt && \
+    echo "${VERSION}" > /dockware/version.txt && \
     date >/dockware/build-date.txt && \
     echo "$(date +%Y) dasistweb GmbH" > /dockware/copyright.txt && \
     mkdir -p /var/www && \
     mkdir -p /var/www/scripts && \
     mkdir -p /var/dockware/cache
 
-RUN echo "id:env-variables" && \
+RUN echo "env-variables" && \
     echo "export TZ=${TZ}" >> /etc/profile \
     && echo "export PHP_VERSION=${PHP_VERSION}" >> /etc/profile \
     && echo "export APACHE_DOCROOT=${APACHE_DOCROOT}" >> /etc/profile \
@@ -70,7 +70,7 @@ RUN echo "id:env-variables" && \
 ##  BASE REQUIREMENTS
 # -------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-RUN echo "id:basics" && \
+RUN echo "basics" && \
     apt-get update && \
     # first install tools to add repositories
     apt-get install -y wget gnupg2 sudo apt-transport-https software-properties-common && \
@@ -106,8 +106,7 @@ RUN echo "id:basics" && \
             git git-lfs \
             apache2 libapache2-mod-fcgid  \
             tideways-php tideways-daemon \
-            mysql-server-8.0 \
-            mysql-client \
+            mysql-server-8.0 mysql-client \
             filebeat && \
     mkdir /var/run/sshd && \
     ln -fs /usr/share/zoneinfo/Europe/Berlin /etc/localtime && echo "${TZ}" > /etc/timezone && \
@@ -119,7 +118,7 @@ RUN echo "id:basics" && \
 ##  USER MANAGEMENT
 # -------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-RUN echo "id:users" && \
+RUN echo "users" && \
     echo "root:root" | chpasswd \
     # set password for www-data, and also
     # avoid shell login (we have a separate user for that)
@@ -158,7 +157,7 @@ RUN echo "id:users" && \
 ##  APACHE CONFIGURATION
 # -------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-RUN echo "id:apache" && \
+RUN echo "apache" && \
     cp /dockware/tmp/config/apache/http2.conf /etc/apache2/conf-available/http2.conf && \
     cp /dockware/tmp/config/apache/apache2.conf /etc/apache2/apache2.conf && \
     cp /dockware/tmp/config/apache/ports.conf /etc/apache2/ports.conf && \
@@ -195,7 +194,7 @@ RUN echo "id:apache" && \
 ##  MYSQL CONFIGURATION
 # -------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-RUN echo "id:mysql" && \
+RUN echo "mysql" && \
     cp /dockware/tmp/config/mysql/my.cnf /etc/mysql/my.cnf && \
     # -------------------------------------
     usermod -d /var/lib/mysql/ mysql  && \
@@ -213,7 +212,7 @@ RUN echo "id:mysql" && \
 ##  PHP INSTALLATION
 # -------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-RUN echo "id:php" && \
+RUN echo "php" && \
     sudo apt-get update && \
     cd /dockware/tmp/scripts && bash install_php.sh && \
     curl -sS https://getcomposer.org/installer | php -- --install-dir=/tmp --version=2.2.9 --quiet && \
@@ -231,7 +230,7 @@ RUN echo "id:php" && \
 ##  NODE INSTALLATION
 ## ***********************************************************************
 
-RUN echo "id:node" && \
+RUN echo "node" && \
     cd /dockware/tmp/scripts && bash install_node.sh && \
     mkdir /var/www/.npm && \
     npm config set cache /var/www/.npm && \
@@ -242,7 +241,7 @@ RUN echo "id:node" && \
 ##  SHOPWARE INSTALLATION
 ## ***********************************************************************
 
-#RUN echo "id:shopware" && \
+#RUN echo "shopware" && \
 #    cd /dockware/tmp/scripts && bash install_shopware.sh && \
 #    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* \
 
@@ -251,7 +250,7 @@ RUN echo "id:node" && \
 ##  PERMISSIONS
 ## ***********************************************************************
 
-RUN echo "id:permissions" && \
+RUN echo "permissions" && \
     chown 33:33 -R /var/www/.composer && \
     chown 33:33 -R /var/www/.npm && \
     chown 33:33 -R /var/www/scripts && \
