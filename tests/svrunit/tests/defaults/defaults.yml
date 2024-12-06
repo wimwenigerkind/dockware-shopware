@@ -110,7 +110,7 @@ file_exists:
     expected: 1
 
   - name: "AdminerEvo exists"
-    file: " /var/www/adminer/adminer.php"
+    file: " /var/www/adminer/index.php"
     expected: 1
 
 file_content:

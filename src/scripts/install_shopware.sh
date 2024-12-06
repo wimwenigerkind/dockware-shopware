@@ -13,11 +13,9 @@ sudo service mysql start
 # switch to default PHP before installing
 sudo update-alternatives --set php /usr/bin/php8.3 > /dev/null 2>&1
 # -------------------------------------------------------------------------------------------
-mkdir -p /var/www/tmp
-cd /var/www && composer create-project shopware/production:"$SHOPWARE_VERSION" --no-interaction tmp
-cd /var/www/tmp && composer require --dev shopware/dev-tools
-cp -a /var/www/tmp/. /var/www/html
-rm -rf /var/www/tmp
+rm -rf /var/www/html
+cd /var/www && composer create-project shopware/production:"$SHOPWARE_VERSION" --no-interaction html
+cd /var/www/html && composer require --dev shopware/dev-tools
 # -------------------------------------------------------------------------------------------
 # ALWAYS UPDATE .env itself
 # if we would use .env.local, then these things could happen....our 127.0.0.1 instead of localhost for MySQL might not exist in a users custom .env.local

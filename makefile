@@ -34,7 +34,7 @@ endif
 ifndef sw
 	$(error Please provide the argument sw=xyz for the Shopware version to run the command)
 endif
-	@cd ./src && DOCKER_BUILDKIT=1 docker build --build-arg VERSION=$(version) --build-arg SW_VERSION=$(sw) -t dockware/dev:$(version) .
+	@cd ./src && DOCKER_BUILDKIT=1 docker build --no-cache --squash --build-arg VERSION=$(version) --build-arg SW_VERSION=$(sw) -t dockware/dev:$(version) .
 
 analyze: ##2 Shows the size of the image
 ifndef version
@@ -61,6 +61,10 @@ cypress: ##3 Runs all Cypress tests
 ifndef version
 	$(error Please provide the argument version=xyz to run the command)
 endif
+ifndef shopware
+	$(error Please provide the argument shopware=xyz to run the command)
+endif
 	cd ./tests/cypress && make install
 	cd ./tests/cypress && make start-env version=$(version)
-	cd ./tests/cypress && make run url=http://localhost || (make stop-env && false)
+	sleep 10
+	cd ./tests/cypress && make run url=http://localhost shopware=$(shopware) || (make stop-env && false)

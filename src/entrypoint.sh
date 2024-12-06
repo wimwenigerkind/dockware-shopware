@@ -122,7 +122,7 @@ if [ $RECOVERY_MODE = 0 ]; then
         echo "DOCKWARE: decompressing Shopware..."
         sudo zstd -d /var/www/shopware.tar.zst -o /var/www/shopware.tar
         sudo  tar -xf /var/www/shopware.tar -C /var/www/html
-        sudo rm /var/www/shopware.tar.zst /var/www/shopware.tar
+        #sudo rm /var/www/shopware.tar.zst /var/www/shopware.tar
         sudo chown 33:33 /var/www/html -R
     fi
 
