@@ -5,7 +5,7 @@
         <testsuite name="Default Checks" group="core" dockerImage="dockware/dev:{{tag}}">
             <directory>./tests/defaults</directory>
             <directory>./tests/node/v22</directory>
-            <directory>./tests/php/php8.4</directory>
+            <directory>./tests/php/php8.3</directory>
             <directory>./tests/tools/composer/v2</directory>
             <directory>./tests/tools/bun</directory>
             <directory>./tests/features/xdebug-off</directory>
@@ -57,14 +57,6 @@
 
         <!-- PHP -->
 
-        <testsuite name="PHP 8.4, XDebug ON" group="php" dockerImage="dockware/dev:{{tag}}" dockerEnv="PHP_VERSION=8.4,XDEBUG_ENABLED=1">
-            <directory>./tests/php/php8.4</directory>
-            <directory>./tests/tools/xdebug/xdebug3</directory>
-            <directory>./tests/tools/composer/v2</directory>
-            <directory>./tests/tools/tideways/config</directory>
-            <directory>./tests/features/xdebug-on</directory>
-        </testsuite>
-
         <testsuite name="PHP 8.3, XDebug ON" group="php" dockerImage="dockware/dev:{{tag}}" dockerEnv="PHP_VERSION=8.3,XDEBUG_ENABLED=1">
             <directory>./tests/php/php8.3</directory>
             <directory>./tests/tools/xdebug/xdebug3</directory>
@@ -75,30 +67,6 @@
 
         <testsuite name="PHP 8.2, XDebug ON" group="php" dockerImage="dockware/dev:{{tag}}" dockerEnv="PHP_VERSION=8.2,XDEBUG_ENABLED=1">
             <directory>./tests/php/php8.2</directory>
-            <directory>./tests/tools/xdebug/xdebug3</directory>
-            <directory>./tests/tools/composer/v2</directory>
-            <directory>./tests/tools/tideways/config</directory>
-            <directory>./tests/features/xdebug-on</directory>
-        </testsuite>
-
-        <testsuite name="PHP 8.1, XDebug ON" group="php" dockerImage="dockware/dev:{{tag}}" dockerEnv="PHP_VERSION=8.1,XDEBUG_ENABLED=1">
-            <directory>./tests/php/php8.1</directory>
-            <directory>./tests/tools/xdebug/xdebug3</directory>
-            <directory>./tests/tools/composer/v2</directory>
-            <directory>./tests/tools/tideways/config</directory>
-            <directory>./tests/features/xdebug-on</directory>
-        </testsuite>
-
-        <testsuite name="PHP 8.0, XDebug ON" group="php" dockerImage="dockware/dev:{{tag}}" dockerEnv="PHP_VERSION=8.0,XDEBUG_ENABLED=1">
-            <directory>./tests/php/php8.0</directory>
-            <directory>./tests/tools/xdebug/xdebug3</directory>
-            <directory>./tests/tools/composer/v2</directory>
-            <directory>./tests/tools/tideways/config</directory>
-            <directory>./tests/features/xdebug-on</directory>
-        </testsuite>
-
-        <testsuite name="PHP 7.4, XDebug ON" group="php" dockerImage="dockware/dev:{{tag}}" dockerEnv="PHP_VERSION=7.4,XDEBUG_ENABLED=1">
-            <directory>./tests/php/php7.4</directory>
             <directory>./tests/tools/xdebug/xdebug3</directory>
             <directory>./tests/tools/composer/v2</directory>
             <directory>./tests/tools/tideways/config</directory>
