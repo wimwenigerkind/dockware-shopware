@@ -19,7 +19,7 @@ help:
 install: ##1 Installs all dependencies
 	composer install
 
-clear: ##1 Clears all dependencies dangling images
+clean: ##1 Clears all dependencies dangling images
 	rm -rf vendor/*
 	rm -rf node_modules/*
 	docker images -aq -f 'dangling=true' | xargs docker rmi
@@ -31,7 +31,7 @@ build: ##2 Builds the image
 ifndef version
 	$(error Please provide the argument version=xyz to run the command)
 endif
-	@cd ./src && DOCKER_BUILDKIT=1 docker build --build-arg IMAGE_VERSION=$(version) -t dockware/dev:$(version) .
+	@cd ./src && DOCKER_BUILDKIT=1 docker build --no-cache --build-arg IMAGE_VERSION=$(version) -t dockware/dev:$(version) .
 
 analyze: ##2 Shows the size of the image
 ifndef version

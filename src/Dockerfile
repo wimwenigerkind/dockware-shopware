@@ -89,6 +89,7 @@ RUN echo "id:basics" && \
             gosu \
             make \
             curl \
+            tzdata \
             vim \
             unzip \
             bzip2 \
@@ -196,21 +197,16 @@ RUN echo "id:apache" && \
 
 RUN echo "id:mysql" && \
     cp /dockware/tmp/config/mysql/my.cnf /etc/mysql/my.cnf && \
-    chmod 0444 /etc/mysql/my.cnf  && \
-    # -------------------------------------
-    mkdir -p /var/log/mysql &&  \
-    chgrp -R www-data /var/log/mysql && \
     # -------------------------------------
     usermod -d /var/lib/mysql/ mysql  && \
-    mkdir -p /var/libs/mysql &&  \
-    chgrp -R mysql /var/log/mysql && \
+    sudo chmod -R 750 /var/lib/mysql && \
     # -------------------------------------
     service mysql start && \
-    # create ether user for % and also localhost as otherwise you could have to connect to 127.0.0.1 and not localhost as mysql treats this different
+    # create either user for % and also localhost as otherwise you could have to connect to 127.0.0.1 and not localhost as mysql treats this different
     sudo mysql --user=root --password=root -e "ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'root';FLUSH PRIVILEGES;use mysql;select user from user;" && \
     sudo mysql --user=root --password=root -e "CREATE USER 'root'@'%' IDENTIFIED WITH mysql_native_password BY 'root';GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' WITH GRANT OPTION;FLUSH PRIVILEGES;use mysql;select user from user;" && \
-    service mysql stop && \
-    rm -rf /var/lib/mysql/ib*
+    # -------------------------------------
+    service mysql stop
 
 
 # -------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -256,7 +252,7 @@ RUN echo "id:node" && \
 ## ***********************************************************************
 
 RUN echo "id:permissions" && \
-    chown 33:33 -R /var/www/.composer && \
+    # chown 33:33 -R /var/www/.composer && \
     chown 33:33 -R /var/www/.npm && \
     chown 33:33 -R /var/www/scripts && \
     chown 33:33 -R /var/www/html && \
