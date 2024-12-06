@@ -117,6 +117,14 @@ if [ $RECOVERY_MODE = 0 ]; then
     sudo chown -R mysql:mysql /var/lib/mysql /var/run/mysqld
     sudo service mysql start;
 
+
+    if [ -f /var/www/shopware.tar.zst ]; then
+        echo "DOCKWARE: decompressing Shopware..."
+        sudo zstd -d /var/www/shopware.tar.zst -o /var/www/shopware.tar
+        sudo  tar -xf /var/www/shopware.tar -C /var/www/html
+        sudo rm /var/www/shopware.tar.zst /var/www/shopware.tar
+    fi
+
     # --------------------------------------------------
     # APACHE
     # first set the correct doc root, because we need it for the php switch below

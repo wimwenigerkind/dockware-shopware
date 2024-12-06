@@ -68,8 +68,8 @@ commands:
     expected: "Europe/Berlin"
 
   - name: "PHP FPM Service is running"
-    command: "sudo service php8.4-fpm status"
-    expected: "is running"
+    command: "pgrep -a php-fpm"
+    expected: "php-fpm: master process (/etc/php/"
 
   - name: "MySQL Service is running"
     command: "sudo service mysql status"

@@ -50,7 +50,7 @@ RUN mkdir -p /dockware && \
     mkdir -p /var/www/scripts && \
     mkdir -p /var/dockware/cache
 
-RUN echo "env-variables" && \
+RUN echo "1:env-variables" && \
     echo "export TZ=${TZ}" >> /etc/profile \
     && echo "export PHP_VERSION=${PHP_VERSION}" >> /etc/profile \
     && echo "export APACHE_DOCROOT=${APACHE_DOCROOT}" >> /etc/profile \
@@ -70,7 +70,7 @@ RUN echo "env-variables" && \
 ##  BASE REQUIREMENTS
 # -------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-RUN echo "basics" && \
+RUN echo "2:basics" && \
     apt-get update && \
     # first install tools to add repositories
     apt-get install -y wget gnupg2 sudo apt-transport-https software-properties-common && \
@@ -118,7 +118,7 @@ RUN echo "basics" && \
 ##  USER MANAGEMENT
 # -------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-RUN echo "users" && \
+RUN echo "3:users" && \
     echo "root:root" | chpasswd \
     # set password for www-data, and also
     # avoid shell login (we have a separate user for that)
@@ -157,7 +157,7 @@ RUN echo "users" && \
 ##  APACHE CONFIGURATION
 # -------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-RUN echo "apache" && \
+RUN echo "4:apache" && \
     cp /dockware/tmp/config/apache/http2.conf /etc/apache2/conf-available/http2.conf && \
     cp /dockware/tmp/config/apache/apache2.conf /etc/apache2/apache2.conf && \
     cp /dockware/tmp/config/apache/ports.conf /etc/apache2/ports.conf && \
@@ -194,7 +194,7 @@ RUN echo "apache" && \
 ##  MYSQL CONFIGURATION
 # -------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-RUN echo "mysql" && \
+RUN echo "5:mysql" && \
     cp /dockware/tmp/config/mysql/my.cnf /etc/mysql/my.cnf && \
     # -------------------------------------
     usermod -d /var/lib/mysql/ mysql  && \
@@ -212,7 +212,7 @@ RUN echo "mysql" && \
 ##  PHP INSTALLATION
 # -------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-RUN echo "php" && \
+RUN echo "6:php" && \
     sudo apt-get update && \
     cd /dockware/tmp/scripts && bash install_php.sh && \
     curl -sS https://getcomposer.org/installer | php -- --install-dir=/tmp --version=2.2.9 --quiet && \
@@ -230,7 +230,7 @@ RUN echo "php" && \
 ##  NODE INSTALLATION
 ## ***********************************************************************
 
-RUN echo "node" && \
+RUN echo "7:node" && \
     cd /dockware/tmp/scripts && bash install_node.sh && \
     mkdir /var/www/.npm && \
     npm config set cache /var/www/.npm && \
@@ -240,17 +240,20 @@ RUN echo "node" && \
 ## ***********************************************************************
 ##  SHOPWARE INSTALLATION
 ## ***********************************************************************
+# SHOPWARE 298 MB originally => 67 MB
 
-#RUN echo "shopware" && \
-#    cd /dockware/tmp/scripts && bash install_shopware.sh && \
-#    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* \
+RUN echo "8:shopware" && \
+    cd /dockware/tmp/scripts && bash install_shopware.sh && \
+    tar -cf - -C /var/www/html . | zstd --ultra -22 -o /var/www/shopware.tar.zst && \
+    find /var/www/html -mindepth 1 -delete && \
+    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* \
 
 
 ## ***********************************************************************
 ##  PERMISSIONS
 ## ***********************************************************************
 
-RUN echo "permissions" && \
+RUN echo "9:permissions" && \
     chown 33:33 -R /var/www/.composer && \
     chown 33:33 -R /var/www/.npm && \
     chown 33:33 -R /var/www/scripts && \
