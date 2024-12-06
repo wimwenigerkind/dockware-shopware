@@ -6,6 +6,7 @@ LABEL title="Dockware dev:latest" \
       maintainer="dasistweb GmbH"
 
 ARG VERSION
+ARG SW_VERSION
 
 ## ***********************************************************************
 ##  IMAGE VARIABLES
@@ -243,7 +244,7 @@ RUN echo "7:node" && \
 # SHOPWARE 298 MB originally => 67 MB
 
 RUN echo "8:shopware" && \
-    cd /dockware/tmp/scripts && bash install_shopware.sh && \
+    cd /dockware/tmp/scripts && bash install_shopware.sh ${SW_VERSION}  && \
     tar -cf - -C /var/www/html . | zstd --ultra -22 -o /var/www/shopware.tar.zst && \
     find /var/www/html -mindepth 1 -delete && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* \

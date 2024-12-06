@@ -75,6 +75,14 @@ commands:
     command: "sudo service mysql status"
     expected: "Slow queries:"
 
+  - name: "Shopware is decompressed and in DocRoot"
+    command: "ls -la /var/www/html"
+    expected: "vendor"
+
+  - name: "Shopware PHP CLI works"
+    command: "cd /var/www/html && php bin/console"
+    expected: "cache:clear"
+
 file_exists:
 
   - name: "SSH Private Key exists"

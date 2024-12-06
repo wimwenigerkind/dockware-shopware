@@ -1,12 +1,20 @@
 #!/bin/bash
 
+SHOPWARE_VERSION=$1
+
+if [ -z "$SHOPWARE_VERSION" ]; then
+    echo "Usage: $0 <shopware-version>"
+    exit 1
+fi
+
+
 sudo service mysql start
 # -------------------------------------------------------------------------------------------
 # switch to default PHP before installing
 sudo update-alternatives --set php /usr/bin/php8.3 > /dev/null 2>&1
 # -------------------------------------------------------------------------------------------
 mkdir -p /var/www/tmp
-cd /var/www && composer create-project shopware/production:6.6.8.2 --no-interaction tmp
+cd /var/www && composer create-project shopware/production:"$SHOPWARE_VERSION" --no-interaction tmp
 cd /var/www/tmp && composer require --dev shopware/dev-tools
 cp -a /var/www/tmp/. /var/www/html
 rm -rf /var/www/tmp

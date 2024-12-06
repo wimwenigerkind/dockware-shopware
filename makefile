@@ -31,7 +31,10 @@ build: ##2 Builds the image
 ifndef version
 	$(error Please provide the argument version=xyz to run the command)
 endif
-	@cd ./src && DOCKER_BUILDKIT=1 docker build --no-cache --build-arg VERSION=$(version) -t dockware/dev:$(version) .
+ifndef sw
+	$(error Please provide the argument sw=xyz for the Shopware version to run the command)
+endif
+	@cd ./src && DOCKER_BUILDKIT=1 docker build --build-arg VERSION=$(version) --build-arg SW_VERSION=$(sw) -t dockware/dev:$(version) .
 
 analyze: ##2 Shows the size of the image
 ifndef version
