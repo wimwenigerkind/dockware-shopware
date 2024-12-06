@@ -252,7 +252,7 @@ RUN echo "id:node" && \
 ## ***********************************************************************
 
 RUN echo "id:permissions" && \
-    # chown 33:33 -R /var/www/.composer && \
+    chown 33:33 -R /var/www/.composer && \
     chown 33:33 -R /var/www/.npm && \
     chown 33:33 -R /var/www/scripts && \
     chown 33:33 -R /var/www/html && \
