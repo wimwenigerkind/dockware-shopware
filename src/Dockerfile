@@ -43,34 +43,32 @@ COPY --chmod=0755 entrypoint.sh /entrypoint.sh
 
 # these are identifier values
 # that are read and shown to the user about this image
-RUN mkdir -p /dockware && \
+RUN echo "1:env-variables" && \
+    mkdir -p /dockware && \
     echo "${VERSION}" > /dockware/version.txt && \
     date >/dockware/build-date.txt && \
     echo "$(date +%Y) dasistweb GmbH" > /dockware/copyright.txt && \
     mkdir -p /var/www && \
     mkdir -p /var/www/scripts && \
-    mkdir -p /var/dockware/cache
-
-RUN echo "1:env-variables" && \
-    echo "export TZ=${TZ}" >> /etc/profile \
-    && echo "export PHP_VERSION=${PHP_VERSION}" >> /etc/profile \
-    && echo "export APACHE_DOCROOT=${APACHE_DOCROOT}" >> /etc/profile \
-    && echo "export NODE_VERSION=${NODE_VERSION}" >> /etc/profile \
-    && echo "export RECOVERY_MODE=${RECOVERY_MODE}" >> /etc/profile \
-    && echo "export SSH_USER=${SSH_USER}" >> /etc/profile \
-    && echo "export SSH_PWD=${SSH_PWD}" >> /etc/profile \
-    && echo "export XDEBUG_ENABLED=${XDEBUG_ENABLED}" >> /etc/profile \
-    && echo "export XDEBUG_REMOTE_HOST=${XDEBUG_REMOTE_HOST}" >> /etc/profile \
-    && echo "export XDEBUG_CONFIG=${XDEBUG_CONFIG}" >> /etc/profile \
-    && echo "export PHP_IDE_CONFIG=${PHP_IDE_CONFIG}" >> /etc/profile \
-    && echo "export FILEBEAT_ENABLED=${FILEBEAT_ENABLED}" >> /etc/profile \
-    && echo "export SUPERVISOR_ENABLED=${SUPERVISOR_ENABLED}" >> /etc/profile \
-    && echo "export TIDEWAYS_KEY=${TIDEWAYS_KEY}" >> /etc/profile
+    mkdir -p /var/dockware/cache && \
+    echo "export TZ=${TZ}" >> /etc/profile && \
+    echo "export PHP_VERSION=${PHP_VERSION}" >> /etc/profile && \
+    echo "export APACHE_DOCROOT=${APACHE_DOCROOT}" >> /etc/profile && \
+    echo "export NODE_VERSION=${NODE_VERSION}" >> /etc/profile && \
+    echo "export RECOVERY_MODE=${RECOVERY_MODE}" >> /etc/profile && \
+    echo "export SSH_USER=${SSH_USER}" >> /etc/profile && \
+    echo "export SSH_PWD=${SSH_PWD}" >> /etc/profile && \
+    echo "export XDEBUG_ENABLED=${XDEBUG_ENABLED}" >> /etc/profile && \
+    echo "export XDEBUG_REMOTE_HOST=${XDEBUG_REMOTE_HOST}" >> /etc/profile && \
+    echo "export XDEBUG_CONFIG=${XDEBUG_CONFIG}" >> /etc/profile && \
+    echo "export PHP_IDE_CONFIG=${PHP_IDE_CONFIG}" >> /etc/profile && \
+    echo "export FILEBEAT_ENABLED=${FILEBEAT_ENABLED}" >> /etc/profile && \
+    echo "export SUPERVISOR_ENABLED=${SUPERVISOR_ENABLED}" >> /etc/profile && \
+    echo "export TIDEWAYS_KEY=${TIDEWAYS_KEY}" >> /etc/profile
 
 # -------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 ##  BASE REQUIREMENTS
 # -------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
 RUN echo "2:basics" && \
     apt-get update && \
     # first install tools to add repositories
@@ -118,7 +116,6 @@ RUN echo "2:basics" && \
 # -------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 ##  USER MANAGEMENT
 # -------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
 RUN echo "3:users" && \
     echo "root:root" | chpasswd \
     # set password for www-data, and also
@@ -155,10 +152,9 @@ RUN echo "3:users" && \
 
 
 # -------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-##  APACHE CONFIGURATION
+##  APACHE + MYSQL CONFIGURATION
 # -------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-RUN echo "4:apache" && \
+RUN echo "4:apache-mysql" && \
     cp /dockware/tmp/config/apache/http2.conf /etc/apache2/conf-available/http2.conf && \
     cp /dockware/tmp/config/apache/apache2.conf /etc/apache2/apache2.conf && \
     cp /dockware/tmp/config/apache/ports.conf /etc/apache2/ports.conf && \
@@ -188,14 +184,8 @@ RUN echo "4:apache" && \
     ## ***********************************************************************
     mkdir /etc/apache2/ssl && \
     openssl req -new -x509 -days 365 -sha1 -newkey rsa:2048 -nodes -keyout /etc/apache2/ssl/server.key -out /etc/apache2/ssl/server.crt -subj '/O=Company/OU=Department/CN=localhost' && \
-    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
-
-
-# -------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-##  MYSQL CONFIGURATION
-# -------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-RUN echo "5:mysql" && \
+    # -------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    # -------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     cp /dockware/tmp/config/mysql/my.cnf /etc/mysql/my.cnf && \
     # -------------------------------------
     usermod -d /var/lib/mysql/ mysql  && \
@@ -206,13 +196,17 @@ RUN echo "5:mysql" && \
     sudo mysql --user=root --password=root -e "ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'root';FLUSH PRIVILEGES;use mysql;select user from user;" && \
     sudo mysql --user=root --password=root -e "CREATE USER 'root'@'%' IDENTIFIED WITH mysql_native_password BY 'root';GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' WITH GRANT OPTION;FLUSH PRIVILEGES;use mysql;select user from user;" && \
     # -------------------------------------
-    service mysql stop
+    service mysql stop && \
+    # -------------------------------------------------------------------------------------------------
+    # ------------------------------------------------------------------------------------------------- \
+    mkdir /var/www/adminer && \
+    wget "https://github.com/adminerevo/adminerevo/releases/download/v4.8.4/adminer-4.8.4.php" -O /var/www/adminer/index.php && \
+    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 
 # -------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 ##  PHP INSTALLATION
 # -------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
 RUN echo "6:php" && \
     sudo apt-get update && \
     cd /dockware/tmp/scripts && bash install_php.sh && \
@@ -230,7 +224,6 @@ RUN echo "6:php" && \
 ## ***********************************************************************
 ##  NODE INSTALLATION
 ## ***********************************************************************
-
 RUN echo "7:node" && \
     cd /dockware/tmp/scripts && bash install_node.sh && \
     mkdir /var/www/.npm && \
@@ -241,8 +234,6 @@ RUN echo "7:node" && \
 ## ***********************************************************************
 ##  SHOPWARE INSTALLATION
 ## ***********************************************************************
-# SHOPWARE 298 MB originally => 67 MB
-
 RUN echo "8:shopware" && \
     cd /dockware/tmp/scripts && bash install_shopware.sh ${SW_VERSION}  && \
     tar -cf - -C /var/www/html . | zstd --ultra -22 -o /var/www/shopware.tar.zst && \
@@ -253,7 +244,6 @@ RUN echo "8:shopware" && \
 ## ***********************************************************************
 ##  PERMISSIONS
 ## ***********************************************************************
-
 RUN echo "9:permissions" && \
     chown 33:33 -R /var/www/.composer && \
     chown 33:33 -R /var/www/.npm && \

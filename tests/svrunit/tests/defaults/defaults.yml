@@ -109,6 +109,10 @@ file_exists:
     file: " /dockware/build-date.txt"
     expected: 1
 
+  - name: "AdminerEvo exists"
+    file: " /var/www/adminer/adminer.php"
+    expected: 1
+
 file_content:
 
   - name: "Apache sites.conf FPM placeholder is replaced"
