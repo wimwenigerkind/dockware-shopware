@@ -27,6 +27,18 @@ clean: ##1 Clears all dependencies dangling images
 
 # ----------------------------------------------------------------------------------------------------------------
 
+all: ##2 Builds, Tests and Analyzes the image
+ifndef version
+	$(error Please provide the argument version=xyz to run the command)
+endif
+ifndef shopware
+	$(error Please provide the argument shopware=xyz to run the command)
+endif
+	make build   version=$(version) sw=$(shopware)
+	make svrunit version=$(version)
+	make cypress version=$(version) shopware=$(shopware)
+	make analyze version=$(version)
+
 build: ##2 Builds the image
 ifndef version
 	$(error Please provide the argument version=xyz to run the command)
