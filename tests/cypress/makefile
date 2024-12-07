@@ -56,4 +56,4 @@ ifndef shopware
 	$(warning Please provide the shopware argument to Start Cypress!)
 	@exit 1
 endif
-	CYPRESS_BASE_URL=$(url) ./node_modules/.bin/cypress run --headless
+	CYPRESS_BASE_URL=$(url) CYPRESS_SHOPWARE=$(shopware) ./node_modules/.bin/cypress run --headless

@@ -106,7 +106,10 @@ RUN echo "2:basics" && \
             apache2 libapache2-mod-fcgid  \
             tideways-php tideways-daemon \
             mysql-server-8.0 mysql-client \
-            filebeat && \
+            filebeat \
+            ruby ruby-dev build-essential && \
+    gem install mailcatcher && \
+    apt-get remove -y ruby-dev build-essential && \
     mkdir /var/run/sshd && \
     ln -fs /usr/share/zoneinfo/Europe/Berlin /etc/localtime && echo "${TZ}" > /etc/timezone && \
     apt-get clean && \
@@ -243,13 +246,13 @@ RUN echo "8:shopware" && \
     # it has to be in html, because users might mount that folder, and if its not inside, it would \
     # always exist and therefore always overwrite the users custom-mount html folder \
     mv /var/www/shopware.tar.zst /var/www/html/shopware.tar.zst && \
-    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* \
+    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* && \
 
 
 ## ***********************************************************************
 ##  PERMISSIONS
 ## ***********************************************************************
-RUN echo "9:permissions+cleanup" && \
+    echo "9:permissions+cleanup" && \
     chown 33:33 -R /var/www/scripts && \
     chown 33:33 -R /var/www/html && \
     rm -rf /dockware/tmp && \
