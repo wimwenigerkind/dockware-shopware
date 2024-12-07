@@ -4,24 +4,46 @@ import Shopware from "Services/Shopware";
 const shopware = new Shopware();
 
 
-it('Shopware Storefront is available', () => {
-
-    cy.visit('/');
-
-    cy.contains('Realised with Shopware');
+beforeEach(() => {
+    cy.viewport(1920, 1080);
 })
 
+describe('Shopware Storefront', () => {
 
-it('Verify installed Shopware Version: ' + shopware.getVersion(), () => {
+    it('Shopware Storefront is available', () => {
 
-    cy.viewport(1800, 1200);
+        cy.visit('/');
 
-    cy.visit('/admin');
+        cy.contains('Realised with Shopware');
+    })
 
-    cy.get('#sw-field--username').type('admin');
-    cy.get('#sw-field--password').type('shopware');
+    it('Shopware Storefront navigation is working', () => {
 
-    cy.get('.sw-button').click();
+        cy.visit('/');
 
-    cy.contains('.sw-version__info', shopware.getVersion());
+        cy.get('.nav-item-a515ae260223466f8e37471d279e6406 > .main-navigation-link-text > span').click();
+
+        cy.contains('Main product with properties');
+    })
+
+    it('Symfony Debug toolbar is existing', () => {
+
+        cy.visit('/');
+
+        cy.get('.sf-toolbar-icon > .sf-toolbar-status').should('exist');
+    })
+});
+
+
+describe('Shopware Administration', () => {
+
+    it('Verify installed Shopware Version: ' + shopware.getVersion(), () => {
+
+        cy.visit('/admin');
+        cy.get('#sw-field--username').type('admin');
+        cy.get('#sw-field--password').type('shopware');
+        cy.get('.sw-button').click();
+
+        cy.contains('.sw-version__info', shopware.getVersion());
+    })
 })
