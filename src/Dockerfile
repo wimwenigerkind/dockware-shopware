@@ -228,6 +228,7 @@ RUN echo "7:node" && \
     cd /dockware/tmp/scripts && bash install_node.sh && \
     mkdir /var/www/.npm && \
     npm config set cache /var/www/.npm && \
+    chown 33:33 -R /var/www/.npm && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 
@@ -238,15 +239,17 @@ RUN echo "8:shopware" && \
     cd /dockware/tmp/scripts && bash install_shopware.sh ${SW_VERSION}  && \
     tar -cf - -C /var/www/html . | zstd --ultra -22 -o /var/www/shopware.tar.zst && \
     find /var/www/html -mindepth 1 -delete && \
+    # we need the zst in the html folder. if existing entrypoint.sh will decompress it \
+    # it has to be in html, because users might mount that folder, and if its not inside, it would \
+    # always exist and therefore always overwrite the users custom-mount html folder \
+    mv /var/www/shopware.tar.zst /var/www/html/shopware.tar.zst && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* \
 
 
 ## ***********************************************************************
 ##  PERMISSIONS
 ## ***********************************************************************
-RUN echo "9:permissions" && \
-    chown 33:33 -R /var/www/.composer && \
-    chown 33:33 -R /var/www/.npm && \
+RUN echo "9:permissions+cleanup" && \
     chown 33:33 -R /var/www/scripts && \
     chown 33:33 -R /var/www/html && \
     rm -rf /dockware/tmp && \
