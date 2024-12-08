@@ -152,6 +152,11 @@ if [ $RECOVERY_MODE = 0 ]; then
     # --------------------------------------------------
 
 
+    echo "DOCKWARE: starting mailcatcher...."
+    sudo /usr/bin/env $(which mailcatcher) --ip=0.0.0.0
+    echo "-----------------------------------------------------------"
+
+
     if [ $FILEBEAT_ENABLED = 1 ]; then
        echo "DOCKWARE: activating Filebeat..."
        sudo service filebeat start --strict.perms=false
@@ -182,7 +187,10 @@ if [ $RECOVERY_MODE = 0 ]; then
     echo "WOHOOO, container IS READY :) - let's get started"
     echo "-----------------------------------------------------"
     echo "PHP: $(php -v | grep cli)"
+    echo "Node: $(node -v)"
     echo "Apache DocRoot: ${APACHE_DOCROOT}"
+    echo "ADMINER URL: http://localhost/adminer" # TODO SHOP_DOMAIN variable wieder machen
+    echo "MAILCATCHER URL: http://localhost/mailcatcher"
 
 else
 
