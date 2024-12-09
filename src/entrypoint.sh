@@ -191,6 +191,7 @@ if [ $RECOVERY_MODE = 0 ]; then
     echo "Apache DocRoot: ${APACHE_DOCROOT}"
     echo "ADMINER URL: http://localhost/adminer" # TODO SHOP_DOMAIN variable wieder machen
     echo "MAILCATCHER URL: http://localhost/mailcatcher"
+    echo "PIMPMYLOG URL: http://localhost/logs"
 
 else
 

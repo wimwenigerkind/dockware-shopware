@@ -24,7 +24,7 @@ clean: ##1 Cleans all dependencies
 
 # ---------------------------------------------------------------------------------------------
 
-start-env: ##2 Starts the environment
+start-env: ##2 Starts the environment (make start-env version=xyz)
 ifndef version
 	$(error Please provide the argument version=xyz to run the command)
 endif
@@ -36,7 +36,7 @@ stop-env: ##2 Stops the environment
 
 # ---------------------------------------------------------------------------------------------
 
-open-ui: ##3 Opens Cypress UI
+open-ui: ##3 Opens Cypress UI (make open-ui url=xy shopware=xy)
 ifndef url
 	$(warning Please provide the URL argument to Start Cypress!)
 	@exit 1
@@ -47,7 +47,7 @@ ifndef shopware
 endif
 	CYPRESS_BASE_URL=$(url) CYPRESS_SHOPWARE=$(shopware) ./node_modules/.bin/cypress open --env conf=dev
 
-run: ##3 Runs all E2E tests for Flex
+run: ##3 Runs all E2E tests for Flex (make run url=xy shopware=xy)
 ifndef url
 	$(warning Please provide the URL argument to Start Cypress!)
 	@exit 1

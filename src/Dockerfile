@@ -112,6 +112,19 @@ RUN echo "2:basics" && \
     apt-get remove -y ruby-dev build-essential && \
     mkdir /var/run/sshd && \
     ln -fs /usr/share/zoneinfo/Europe/Berlin /etc/localtime && echo "${TZ}" > /etc/timezone && \
+    # --------------------------------------------------------------------------- \
+    mkdir -p /var/www/pimpmylog && \
+    wget -O - https://github.com/potsky/PimpMyLog/tarball/master | tar xzf - && \
+    mv potsky-PimpMyLog-* /var/www/pimpmylog && \
+    mv /var/www/pimpmylog/potsky-PimpMyLog-2fed8c1/* /var/www/pimpmylog && \
+    rm -rf /var/www/pimpmylog/potsky-PimpMyLog-* && \
+    mv /dockware/tmp/config/pimpmylog/config.user.d /var/www/pimpmylog/config.user.d && \
+    mv /dockware/tmp/config/pimpmylog/config.users.json /var/www/pimpmylog/config.users.json && \
+    # apply our custom file with fixes for PHP 8
+    # its used from here: https://github.com/potsky/PimpMyLog/pull/149/files
+    mv /dockware/tmp/config/pimpmylog/global.inc.php /var/www/pimpmylog/inc/global.inc.php && \
+    chown -R www-data:www-data /var/www/pimpmylog/ && \
+    # ---------------------------------------------------------------------------
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
