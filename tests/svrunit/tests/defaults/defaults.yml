@@ -113,6 +113,11 @@ file_exists:
     file: " /var/www/adminer/index.php"
     expected: 1
 
+directory_exists:
+  - name: "PimpMyLogs is created"
+    directory: "/var/www/pimpmylog"
+    expected: 1
+
 file_content:
 
   - name: "Apache sites.conf FPM placeholder is replaced"
@@ -122,3 +127,7 @@ file_content:
   - name: "Apache sites.conf DocRoot placeholder is replaced"
     file: "/etc/apache2/sites-enabled/000-default.conf"
     not_expected: "__dockware_apache_docroot__"
+
+  - name: "PimpMyLogs root config file is created"
+    file: "/var/www/pimpmylog/config.user.json"
+    expected: "Dockware Logs"

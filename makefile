@@ -27,28 +27,28 @@ clean: ##1 Clears all dependencies dangling images
 
 # ----------------------------------------------------------------------------------------------------------------
 
-all: ##2 Builds, Tests and Analyzes the image
+all: ##2 Builds, Tests and Analyzes the image (make all version=xyz shopware=xyz)
 ifndef version
 	$(error Please provide the argument version=xyz to run the command)
 endif
 ifndef shopware
 	$(error Please provide the argument shopware=xyz to run the command)
 endif
-	make build   version=$(version) sw=$(shopware)
+	make build   version=$(version) shopware=$(shopware)
 	make svrunit version=$(version)
 	make cypress version=$(version) shopware=$(shopware)
 	make analyze version=$(version)
 
-build: ##2 Builds the image
+build: ##2 Builds the image (make build version=xyz shopware=xyz)
 ifndef version
 	$(error Please provide the argument version=xyz to run the command)
 endif
-ifndef sw
-	$(error Please provide the argument sw=xyz for the Shopware version to run the command)
+ifndef shopware
+	$(error Please provide the argument shopware=xyz for the Shopware version to run the command)
 endif
-	@cd ./src && DOCKER_BUILDKIT=1 docker build --no-cache --squash --build-arg VERSION=$(version) --build-arg SW_VERSION=$(sw) -t dockware/dev:$(version) .
+	@cd ./src && DOCKER_BUILDKIT=1 docker build --no-cache --squash --build-arg VERSION=$(version) --build-arg SW_VERSION=$(shopware) -t dockware/dev:$(version) .
 
-analyze: ##2 Shows the size of the image
+analyze: ##2 Shows the size of the image (make analyze version=xyz)
 ifndef version
 	$(error Please provide the argument version=xyz to run the command)
 endif
@@ -63,13 +63,13 @@ endif
 
 # ----------------------------------------------------------------------------------------------------------------
 
-svrunit: ##3 Runs all SVRUnit tests
+svrunit: ##3 Runs all SVRUnit tests (make svrunit version=xyz)
 ifndef version
 	$(error Please provide the argument version=xyz to run the command)
 endif
 	php ./vendor/bin/svrunit test --configuration=./tests/svrunit/dev.xml --docker-tag=$(version) --debug --report-junit --report-html
 
-cypress: ##3 Runs all Cypress tests
+cypress: ##3 Runs all Cypress tests (make cypress version=xyz shopware=xyz)
 ifndef version
 	$(error Please provide the argument version=xyz to run the command)
 endif

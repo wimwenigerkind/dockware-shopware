@@ -119,7 +119,7 @@ RUN echo "2:basics" && \
     mv /var/www/pimpmylog/potsky-PimpMyLog-2fed8c1/* /var/www/pimpmylog && \
     rm -rf /var/www/pimpmylog/potsky-PimpMyLog-* && \
     mv /dockware/tmp/config/pimpmylog/config.user.d /var/www/pimpmylog/config.user.d && \
-    mv /dockware/tmp/config/pimpmylog/config.users.json /var/www/pimpmylog/config.users.json && \
+    mv /dockware/tmp/config/pimpmylog/config.user.json /var/www/pimpmylog/config.user.json && \
     # apply our custom file with fixes for PHP 8
     # its used from here: https://github.com/potsky/PimpMyLog/pull/149/files
     mv /dockware/tmp/config/pimpmylog/global.inc.php /var/www/pimpmylog/inc/global.inc.php && \
