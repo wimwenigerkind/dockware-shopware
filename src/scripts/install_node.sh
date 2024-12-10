@@ -2,8 +2,6 @@
 
 NODE_VERSIONS=("22" "20")
 
-# TODO node 18?
-# TODO pnpm, bun, pm2
 DEFAULT_NODE_VERSION=22
 
 

@@ -114,8 +114,13 @@ file_exists:
     expected: 1
 
 directory_exists:
+
   - name: "PimpMyLogs is created"
     directory: "/var/www/pimpmylog"
+    expected: 1
+
+  - name: "Dockware Sample Plugin exists"
+    directory: "/var/www/html/custom/plugins/DockwareSamplePlugin"
     expected: 1
 
 file_content:

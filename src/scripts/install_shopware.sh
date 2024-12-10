@@ -8,6 +8,8 @@ if [ -z "$SHOPWARE_VERSION" ]; then
 fi
 
 
+
+
 sudo service mysql start
 # -------------------------------------------------------------------------------------------
 # switch to default PHP before installing
@@ -32,12 +34,11 @@ echo "MAILER_DSN=smtp://127.0.0.1:1025" >> /var/www/html/.env
 cd /var/www/html && php bin/console system:install --create-database --basic-setup
 cd /var/www/html && php bin/console assets:install
 # -------------------------------------------------------------------------------------------
+mv /dockware/tmp/config/DockwareSamplePlugin /var/www/html/custom/plugins/DockwareSamplePlugin
 cd /var/www/html && APP_ENV=prod php bin/console store:download -p SwagPlatformDemoData
 cd /var/www/html && APP_ENV=prod php bin/console plugin:refresh
 cd /var/www/html && APP_ENV=prod php bin/console plugin:install --activate SwagPlatformDemoData
-# -------------------------------------------------------------------------------------------
-#cd /var/www/html && php bin/console plugin:install DockwareSamplePlugin
-#cd /var/www/html && php bin/console plugin:activate DockwareSamplePlugin
+cd /var/www/html && APP_ENV=prod php bin/console plugin:install --activate DockwareSamplePlugin
 # -------------------------------------------------------------------------------------------
 # clear cache and refresh dal index to show the new demo data
 cd /var/www/html && php bin/console cache:clear

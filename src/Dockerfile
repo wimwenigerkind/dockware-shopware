@@ -15,6 +15,7 @@ ENV TZ=Europe/Berlin
 ENV PHP_VERSION=not-set
 ENV NODE_VERSION=not-set
 ENV APACHE_DOCROOT=/var/www/html/public
+ENV SHOP_DOMAIN localhost
 ENV RECOVERY_MODE=0
 ENV SSH_USER=not-set
 ENV SSH_PWD=not-set
@@ -25,8 +26,12 @@ ENV XDEBUG_ENABLED=0
 ENV FILEBEAT_ENABLED=0
 ENV SUPERVISOR_ENABLED=0
 ENV TIDEWAYS_KEY=not-set
+ENV SW_CURRENCY 'not-set'
+ENV SW_API_ACCESS_KEY 'not-set'
+ENV SW_TASKS_ENABLED 0
 ENV BASH_ENV=/var/www/.bashrc
 ENV DEBIAN_FRONTEND=noninteractive
+
 
 # these are all our files that we need to setup the image
 COPY --chmod=0755 ./scripts /dockware/tmp/scripts
@@ -54,6 +59,7 @@ RUN echo "1:env-variables" && \
     echo "export TZ=${TZ}" >> /etc/profile && \
     echo "export PHP_VERSION=${PHP_VERSION}" >> /etc/profile && \
     echo "export APACHE_DOCROOT=${APACHE_DOCROOT}" >> /etc/profile && \
+    echo "export SHOP_DOMAIN=${SHOP_DOMAIN}" >> /etc/profile && \
     echo "export NODE_VERSION=${NODE_VERSION}" >> /etc/profile && \
     echo "export RECOVERY_MODE=${RECOVERY_MODE}" >> /etc/profile && \
     echo "export SSH_USER=${SSH_USER}" >> /etc/profile && \
@@ -64,6 +70,9 @@ RUN echo "1:env-variables" && \
     echo "export PHP_IDE_CONFIG=${PHP_IDE_CONFIG}" >> /etc/profile && \
     echo "export FILEBEAT_ENABLED=${FILEBEAT_ENABLED}" >> /etc/profile && \
     echo "export SUPERVISOR_ENABLED=${SUPERVISOR_ENABLED}" >> /etc/profile && \
+    echo "export SW_CURRENCY=${SW_CURRENCY}" >> /etc/profile && \
+    echo "export SW_API_ACCESS_KEY=${SW_API_ACCESS_KEY}" >> /etc/profile && \
+    echo "export SW_TASKS_ENABLED=${SW_TASKS_ENABLED}" >> /etc/profile && \
     echo "export TIDEWAYS_KEY=${TIDEWAYS_KEY}" >> /etc/profile
 
 # -------------------------------------------------------------------------------------------------------------------------------------------------------------------------

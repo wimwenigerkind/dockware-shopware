@@ -151,10 +151,45 @@ if [ $RECOVERY_MODE = 0 ]; then
     echo "-----------------------------------------------------------"
     # --------------------------------------------------
 
-
     echo "DOCKWARE: starting mailcatcher...."
     sudo /usr/bin/env $(which mailcatcher) --ip=0.0.0.0
     echo "-----------------------------------------------------------"
+
+
+
+    if [ $SHOP_DOMAIN != "localhost" ]; then
+        # update our domain. this means we can use the
+        # SHOP DOMAIN as environment variable
+        echo "DOCKWARE: updating domain to ${SHOP_DOMAIN}..."
+        sh /var/www/scripts/shopware6/update_domain.sh
+        echo "-----------------------------------------------------------"
+    fi
+
+    if [ $SW_CURRENCY != "not-set" ]; then
+      echo "DOCKWARE: Switching Shopware default currency..."
+      php /var/www/scripts/shopware6/set_currency.php $SW_CURRENCY
+      echo "-----------------------------------------------------------"
+    fi
+
+    # The access key needs SWSC as a prefix, otherwise shopware
+    # won't be able to access the storefront api.
+    # The PHP script will automatically add it as a prefix, if
+    # it was not defined in the environment variable.
+    # The result "ACTUAL_API_ACCESS_KEY" contains the change.
+    # It will be echoed at the end of the entrypoint, so the
+    # user can see the actual api key they need to use.
+    if [ $SW_API_ACCESS_KEY != "not-set" ]; then
+      echo "DOCKWARE: Set Shopware API access key..."
+      ACTUAL_API_ACCESS_KEY=$(php /var/www/scripts/shopware6/set_api_access_key.php $SW_API_ACCESS_KEY)
+      echo "-----------------------------------------------------------"
+    fi
+
+    if [ $SW_TASKS_ENABLED = 1 ]; then
+      echo "DOCKWARE: creating CRONs for scheduled tasks..."
+        crontab /var/www/scripts/cron/crontab.txt && sudo service cron restart
+      echo "-----------------------------------------------------------"
+    fi
+
 
 
     if [ $FILEBEAT_ENABLED = 1 ]; then
@@ -189,9 +224,9 @@ if [ $RECOVERY_MODE = 0 ]; then
     echo "PHP: $(php -v | grep cli)"
     echo "Node: $(node -v)"
     echo "Apache DocRoot: ${APACHE_DOCROOT}"
-    echo "ADMINER URL: http://localhost/adminer" # TODO SHOP_DOMAIN variable wieder machen
-    echo "MAILCATCHER URL: http://localhost/mailcatcher"
-    echo "PIMPMYLOG URL: http://localhost/logs"
+    echo "ADMINER URL: http://${SHOP_DOMAIN}/adminer"
+    echo "MAILCATCHER URL: http://${SHOP_DOMAIN}/mailcatcher"
+    echo "PIMPMYLOG URL: http://${SHOP_DOMAIN}/logs"
 
 else
 

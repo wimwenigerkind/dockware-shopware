@@ -46,4 +46,21 @@ describe('Shopware Administration', () => {
 
         cy.contains('.sw-version__info', shopware.getVersion());
     })
+
+    it('Dockware Sample Plugin is installed', () => {
+
+        cy.visit('/admin');
+        cy.get('#sw-field--username').type('admin');
+        cy.get('#sw-field--password').type('shopware');
+        cy.get('.sw-button').click();
+
+        cy.get('.sw-extension > span.sw-admin-menu__navigation-link > .sw-admin-menu__navigation-link-label').click();
+        cy.get('.sw-extension-my-extensions > .sw-admin-menu__navigation-link > .sw-admin-menu__navigation-link-label').click();
+
+        const rowDockwarePlugin = ':nth-child(2) > .sw-meteor-card__content > .sw-meteor-card__content-wrapper';
+
+        cy.contains(rowDockwarePlugin, 'Dockware Sample Plugin');
+        cy.contains(rowDockwarePlugin, 'Installed');
+    })
+
 })
