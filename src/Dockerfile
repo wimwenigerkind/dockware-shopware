@@ -36,12 +36,10 @@ ENV DEBIAN_FRONTEND=noninteractive
 # these are all our files that we need to setup the image
 COPY --chmod=0755 ./scripts /dockware/tmp/scripts
 COPY --chmod=0755 ./config /dockware/tmp/config
-
 # this are runtime executables for users
-COPY --chmod=0755 ./assets/scripts/makefile /var/www/makefile
-COPY --chmod=0755 ./assets/scripts/bin /var/www/scripts/bin
-
-# now comment haha, thats clear
+COPY --chmod=0755 ./assets/makefile /var/www/makefile
+COPY --chmod=0755 ./assets/scripts /var/www/scripts
+# entrypoint
 COPY --chmod=0755 entrypoint.sh /entrypoint.sh
 
 # -------------------------------------------------------------------------------------------------------
