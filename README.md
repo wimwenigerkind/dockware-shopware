@@ -12,6 +12,13 @@ Welcome to Dockware Dev! For more information, visit [dockware.io](https://dockw
 
 Dockware Dev is designed to provide developers with an optimal environment that includes multiple "latest" PHP and Node.js versions, Xdebug, and essential tools. Its goal is to streamline development workflows with an up-to-date and clean setup.
 
+
+           CI                    DEV
+                    Shopware                     Essentials (more php and node)
+
+                   
+
+
 ### Key Features:
 
 - Nightly builds (`dev-main`) for cutting-edge updates.
