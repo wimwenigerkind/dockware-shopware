@@ -7,27 +7,44 @@ if ($argc !== 2) {
 
 $shopwareVersion = $argv[1];
 
-// Define the fixed structure
+// Path to the shopware-overview.json file
+$overviewFilePath = __DIR__ . '/shopware-overview.json';
+
+// Check if the shopware-overview.json file exists
+if (!file_exists($overviewFilePath)) {
+    echo "Error: shopware-overview.json not found.\n";
+    exit(1);
+}
+
+// Decode the JSON file
+$overviewData = json_decode(file_get_contents($overviewFilePath), true);
+
+// Check if the specified Shopware version exists in the overview
+if (!isset($overviewData[$shopwareVersion])) {
+    echo "Error: Shopware version $shopwareVersion not found in shopware-overview.json.\n";
+    exit(1);
+}
+
+// Extract PHP and Node values for the specified version
+$phpVersions = $overviewData[$shopwareVersion]['php'] ?? [];
+$nodeVersions = $overviewData[$shopwareVersion]['node'] ?? [];
+
+// Define the data for variables.json
 $data = [
-    "php" => [
-        "8.4",
-        "8.3"
-    ],
-    "node" => [
-        "22"
-    ],
+    "php" => $phpVersions,
+    "node" => $nodeVersions,
     "shopware" => $shopwareVersion
 ];
 
-// Path to the JSON file
-$filePath = __DIR__ . '/../src/config/variables.json';
+// Path to the variables.json file
+$variablesFilePath = __DIR__ . '/../src/config/variables.json';
 
 // Create the directory if it doesn't exist
-if (!is_dir(dirname($filePath))) {
-    mkdir(dirname($filePath), 0777, true);
+if (!is_dir(dirname($variablesFilePath))) {
+    mkdir(dirname($variablesFilePath), 0777, true);
 }
 
-// Write the JSON data to the file
-file_put_contents($filePath, json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
+// Write the JSON data to the variables.json file
+file_put_contents($variablesFilePath, json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
 
-echo "JSON file created at $filePath\n";
+echo "variables.json created successfully at $variablesFilePath\n";

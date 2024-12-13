@@ -24,6 +24,13 @@ echo ""
 set -e
 
 
+
+echo "DOCKWARE: decompressing NVM..."
+sudo zstd -d /var/www/nvm.tar.zst -o /var/www/nvm.tar
+sudo tar -xf /var/www/nvm.tar -C /var/www/.nvm
+sudo rm /var/www/nvm.tar.zst /var/www/nvm.tar
+sudo chown 33:33 /var/www/.nvm -R
+
 source /etc/apache2/envvars
 source /var/www/.bashrc
 
@@ -64,6 +71,7 @@ if [ $RECOVERY_MODE = 0 ]; then
     echo "DOCKWARE: starting cron service...."
     sudo service cron start
     echo "-----------------------------------------------------------"
+
 
     if [ "$NODE_VERSION" != "not-set" ]; then
        echo "DOCKWARE: switching to Node ${NODE_VERSION}..."

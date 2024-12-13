@@ -16,11 +16,11 @@ curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh | bash
 # -----------------------------------------------------------------------------------------
 # INSTALL NODE VERSIONS
 for version in "${NODE_VERSIONS[@]}"; do
-  nvm install "$version"
+  nvm install "$version" -b
   nvm use "$version"
   # we have to install yarn in additional node versions
   # otherwise it won't be found after a nvm switch
-  npm install -g yarn
+  # npm install -g yarn
 done
 
 # -----------------------------------------------------------------------------------------
