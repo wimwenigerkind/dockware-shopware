@@ -46,7 +46,8 @@ endif
 ifndef shopware
 	$(error Please provide the argument shopware=xyz for the Shopware version to run the command)
 endif
-	@cd ./src && DOCKER_BUILDKIT=1 docker build --no-cache --squash --build-arg VERSION=$(version) --build-arg SW_VERSION=$(shopware) -t dockware/dev:$(version) .
+	php ./scripts/create-variables.php $(shopware)
+	@cd ./src && DOCKER_BUILDKIT=1 docker build --no-cache --squash --build-arg VERSION=$(version) -t dockware/dev:$(version) .
 
 analyze: ##2 Shows the size of the image (make analyze version=xyz)
 ifndef version
