@@ -66,10 +66,6 @@ We try to use 1 image (name), and therefore we have to use the Docker tag to ind
 This also gives you the experience, that you can just write any supported Shopware 6 version as tag, without thinking,
 and you end up with the correct image and correct Shopware 6 version.
 
-**Nightly Builds** will be available with the tag `dev-main`.
-These will be built on every push to the main branch.
-Don't forget to include a *docker pull* before launching a **dev-main** image.
-
 ### Deprecations and Legacy services
 
 One thing that is important to us, is that we try to keep the image as slim as possible for developers.

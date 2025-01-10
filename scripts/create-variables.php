@@ -1,7 +1,7 @@
 <?php
 
 if ($argc !== 2) {
-    echo "Usage: php createVariablesJson.php <SHOPWARE_VERSION>\n";
+    echo "Usage: php create-variables.php <SHOPWARE_VERSION>\n";
     exit(1);
 }
 
