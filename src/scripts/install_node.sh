@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# we always support the 2 latest LTS versions
+# https://nodejs.org/en/about/previous-releases
 NODE_VERSIONS=("22" "20")
 
 DEFAULT_NODE_VERSION=22
