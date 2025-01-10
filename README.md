@@ -1,86 +1,115 @@
-# Dockware Dev
-
-![Shopware 6 Preview](./header.jpg)
+# Dockware for Shopware 6
 
 [![MIT licensed](https://img.shields.io/github/license/dockware/dockware.svg?style=flat-square)](https://github.com/dockware/dockware/blob/master/LICENSE)
 ![Docker Pulls](https://img.shields.io/docker/pulls/dockware/flex)
 ![Docker Image Size](https://img.shields.io/docker/image-size/dockware/flex)
 
-Welcome to Dockware Dev! For more information, visit [dockware.io](https://dockware.io).
+Welcome to Dockware! For more information, visit [dockware.io](https://dockware.io).
+
+<!-- TOC -->
+
+* [Dockware Dev](#dockware-dev)
+    * [What is Dockware Dev?](#what-is-dockware-dev)
+    * [When to use this image?](#when-to-use-this-image)
+        * [Versioning](#versioning)
+        * [Deprecations and Legacy services](#deprecations-and-legacy-services)
+    * [Quick Start](#quick-start)
+        * [Docker Run](#docker-run)
+        * [Docker Compose](#docker-compose)
+    * [Documentation and Resources](#documentation-and-resources)
+    * [Contribution](#contribution)
+    * [Features](#features)
+        * [Switch PHP](#switch-php)
+        * [Switch Node](#switch-node)
+        * [Supervisor](#supervisor)
+        * [Conjobs](#conjobs)
+        * [Filebeat](#filebeat)
+        * [SSH User](#ssh-user)
+        * [Tideways](#tideways)
+        * [XDebug](#xdebug)
+            * [1. Enable/Disable XDebug](#1-enabledisable-xdebug)
+            * [2. XDebug Configuration](#2-xdebug-configuration)
+        * [Set Custom Timezone](#set-custom-timezone)
+        * [Recovery Mode](#recovery-mode)
+        * [Set Custom Apache DocRoot](#set-custom-apache-docroot)
+        * [Running in CI/CD](#running-in-cicd)
+        * [Inject Bootstrap Script](#inject-bootstrap-script)
+    * [License](#license)
+
+<!-- TOC -->
 
 ## What is Dockware Dev?
 
-Dockware Dev is designed to provide developers with an optimal environment that includes multiple "latest" PHP and Node.js versions, Xdebug, and essential tools. Its goal is to streamline development workflows with an up-to-date and clean setup.
+Our Dockware images are optimized Docker images for web development in general, but also for Symfony and Shopware projects.
 
+The **dev** image is a ready-to-use image when working with Shopware 6.
+It comes with an installed and prepared Shopware 6 instance, so you can immediately start developing.
+All required services such as MySQL, but also additional things like AdminerEVO, PimpMyLog, etc. are onboard.
+Developers benefit from ready to use features like Xdebug, switching of PHP versions and Node versions and more.
 
-           CI                    DEV
-                    Shopware                     Essentials (more php and node)
+## When to use this image?
 
-                   
+This image is a perfect fit for the following use cases.
 
+* Explore any Shopware 6 version
+* Develop Shopware 6 plugins, apps, themes
+* Use it in pipelines if you need an easy Shopware 6 instance for testing or more
 
-### Key Features:
+If you develop full Shopware 6 shops, we recommend either using the **essentials** image, or even the **flex** image, if you
+know how to use Docker and want to fully rebuild your production environment locally.
 
-- Nightly builds (`dev-main`) for cutting-edge updates.
-- Semantic versioning releases (e.g., `2.0.0`, `2.0.1`, etc.).
-- Comprehensive changelog available in `CHANGELOG.md`.
-- Legacy-free design: removes outdated components like PHP 5.6.
-- Devibility for modern development while continuously evolving with new tools and removing outdated ones.
+### Versioning
 
-The original Dockware Dev image is available with the tag `legacy`.
+While we generally use semantic versioning for other images, this image is a bit different.
+We try to use 1 image (name), and therefore we have to use the Docker tag to indicate the Shopware version.
 
-We try to use the latest technologies (PHP, Node) as default version in our image.
+This also gives you the experience, that you can just write any supported Shopware 6 version as tag, without thinking,
+and you end up with the correct image and correct Shopware 6 version.
 
-<!-- TOC -->
+**Nightly Builds** will be available with the tag `dev-main`.
+These will be built on every push to the main branch.
+Don't forget to include a *docker pull* before launching a **dev-main** image.
 
-* [Releases and Versions](#releases-and-versions)
-* [Documentation and Resources](#documentation-and-resources)
-* [Contribution](#contribution)
-* [Features](#features)
-    * [Switch PHP](#switch-php)
-    * [Switch Node](#switch-node)
-    * [Supervisor](#supervisor)
-    * [Conjobs](#conjobs)
-    * [Filebeat](#filebeat)
-    * [SSH User](#ssh-user)
-    * [Tideways](#tideways)
-    * [XDebug](#xdebug)
-        * [1. Enable/Disable XDebug](#1-enabledisable-xdebug)
-    * [Set Custom Timezone](#set-custom-timezone)
-    * [Recovery Mode](#recovery-mode)
-    * [Set Custom Apache DocRoot](#set-custom-apache-docroot)
-* [License](#license)
+### Deprecations and Legacy services
 
-<!-- TOC -->
+One thing that is important to us, is that we try to keep the image as slim as possible for developers.
+Therefore we only include things like PHP, Node, etc. in versions that are supported by the Shopware version of the image.
 
 ## Quick Start
 
+### Docker Run
+
+This is how you launch any Shopware 6 version with Port 80 (HTTP).
+Your shop is then available at http://localhost.
+
+You can see when the container is ready by checking the logs with **docker logs**
+It usually just needs a few seconds after downloading the image.
+
 ```bash 
-docker run -p 80:80 dockware/flex:latest
+# launch a Shopware available at http::/localhost
+docker run -p 80:80 dockware/dev:6.6.9.0
 ```
 
+### Docker Compose
+
+This is the same as the docker run command, but as docker-compose.yml file.
+In addition, it has **optional environment** variables for PHP and Node versions.
+
+> Please keep in mind, your image will crash if you use PHP or Node versions that do not exist in the image tag version.
+
 ```yaml
-  website:
-    image: dockware/flex:latest
-    volumes:
-      - "./src:/var/www/html"
+  shop:
+    image: dockware/dev:6.6.9.0
+    ports:
+      - 80:80
     environment:
       - PHP_VERSION=8.4
       - NODE_VERSION=20
 ```
 
-## Releases and Versions
-
-Dockware Dev has two main types of releases:
-
-1. **Nightly Builds**: Available with the tag `dev-main`.
-2. **Stable Versions**: Versioned releases like `2.0.0`, `2.0.1`, etc.
-
-Check the `CHANGELOG.md` file for details on all changes and updates. The changelog is also included within the image.
-
 ## Documentation and Resources
 
-Explore more about Dockware Dev:
+Explore more about Dockware:
 
 - **Website**: [dockware.io](https://dockware.io)
 - **Documentation**: Detailed guides and resources are available on the website.

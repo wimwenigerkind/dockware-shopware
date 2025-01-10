@@ -18,6 +18,8 @@ help:
 
 install: ##1 Installs all dependencies
 	composer install
+	cd tests/cypress && make clean
+	cd tests/cypress && make install
 
 clean: ##1 Clears all dependencies dangling images
 	rm -rf vendor/*
