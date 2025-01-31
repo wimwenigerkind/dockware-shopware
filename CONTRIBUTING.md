@@ -1,37 +1,32 @@
 # How to Contribute?
 
 <!-- TOC -->
-
 * [How to Contribute?](#how-to-contribute)
-    * [Add a new Shopware version](#add-a-new-shopware-version)
-    * [Modify the Image](#modify-the-image)
-        * [Modifying PHP](#modifying-php)
-        * [Modifying Node](#modifying-node)
-        * [Other Changes](#other-changes)
-    * [Testing](#testing)
-
+  * [Add a new Shopware version](#add-a-new-shopware-version)
+    * [Modifying PHP](#modifying-php)
+    * [Modifying Node](#modifying-node)
+    * [Other Changes](#other-changes)
+  * [Testing](#testing)
 <!-- TOC -->
 
 ## Add a new Shopware version
 
-If you want to add a new Shopware version, you first need to add the configuration for this version.
-What PHP versions are supported? What Node version?
+We always use the latest Shopware version in the source code.
+If you somehow need to fix a previous version, please use a separate branch from the latest release tag of that Shopware version.
 
-Open the file **./scripts/shopware-overview.json** and add your data.
+Just open the **makefile** and adjust the Shopware version variable.
 
-Now copy the latest **SVRUNIT XML Configuration** for the new Shopware version.
-Please double-check the tests and adjust if needed.
-
-> Pro Tip: stick to the {{tag}} tags to avoid (future) copy/paste errors of Shopware versions.
-
-And that's it.
-Please test it locally by running this simple makefile command
+Then run this command to test everything.
 
 ```bash
-make all shopware=x.x.x.x
+make shopware
 ```
 
-## Modify the Image
+If you need to adjust PHP or Node versions, please open the installation scripts in the **src/scripts** directory.
+If everything works, please create a pull request.
+
+Otherwise, it can happen that you need to adjust things, depending on what has changed :).
+
 
 ### Modifying PHP
 
