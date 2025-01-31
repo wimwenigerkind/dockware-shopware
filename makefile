@@ -2,6 +2,14 @@
 .DEFAULT_GOAL := help
 
 
+# ----------------------------------------------------------------------------------------------------------------
+# ----------------------------------------------------------------------------------------------------------------
+# adjust the shopware version here!
+SW_VERSION:=6.6.9.0
+# ----------------------------------------------------------------------------------------------------------------
+# ----------------------------------------------------------------------------------------------------------------
+
+
 help:
 	@echo "PROJECT COMMANDS"
 	@echo "--------------------------------------------------------------------------------------------"
@@ -29,31 +37,19 @@ clean: ##1 Clears all dependencies dangling images
 
 # ----------------------------------------------------------------------------------------------------------------
 
-all: ##2 Builds, Tests and Analyzes the image (make all shopware=xyz)
-ifndef shopware
-	$(error Please provide the argument shopware=xyz to run the command)
-endif
-	php ./scripts/check-requirements.php $(shopware)
-	make build   shopware=$(shopware)
-	make svrunit shopware=$(shopware)
-	make cypress shopware=$(shopware)
-	make analyze shopware=$(shopware)
+all: ##2 Builds, Tests and Analyzes the image
+	make build
+	make svrunit
+	make cypress
+	make analyze
 
-build: ##2 Builds the image (make build shopware=xyz)
-ifndef shopware
-	$(error Please provide the argument shopware=xyz to run the command)
-endif
-	php ./scripts/check-requirements.php $(shopware)
-	php ./scripts/create-variables.php $(shopware)
-	@cd ./src && DOCKER_BUILDKIT=1 docker build --no-cache --squash --build-arg VERSION=$(shopware) -t dockware/dev:$(shopware) .
+build: ##2 Builds the image
+	@cd ./src && DOCKER_BUILDKIT=1 docker build --squash --build-arg VERSION=$(SW_VERSION) -t dockware/dev:$(SW_VERSION) .
 
-analyze: ##2 Shows the size of the image (make analyze shopware=xyz)
-ifndef shopware
-	$(error Please provide the argument shopware=xyz to run the command)
-endif
-	docker history --format "{{.CreatedBy}}\t\t{{.Size}}" dockware/dev:$(shopware) | grep -v "0B"
+analyze: ##2 Shows the size of the image
+	docker history --format "{{.CreatedBy}}\t\t{{.Size}}" dockware/dev:$(SW_VERSION) | grep -v "0B"
 	# --------------------------------------------------
-	docker save -o dev.tar dockware/dev:$(shopware)
+	docker save -o dev.tar dockware/dev:$(SW_VERSION)
 	gzip dev.tar
 	ls -lh dev.tar.gz
 	# --------------------------------------------------
@@ -62,17 +58,11 @@ endif
 
 # ----------------------------------------------------------------------------------------------------------------
 
-svrunit: ##3 Runs all SVRUnit tests (make svrunit shopware=x.x.x.x)
-ifndef shopware
-	$(error Please provide the argument shopware=xyz to run the command)
-endif
-	php ./vendor/bin/svrunit test --configuration=./tests/svrunit/shopware/$(shopware).xml --docker-tag=$(shopware) --debug --report-junit --report-html
+svrunit: ##3 Runs all SVRUnit tests
+	php ./vendor/bin/svrunit test --configuration=./tests/svrunit/shopware/shopware.xml --docker-tag=$(SW_VERSION) --debug --report-junit --report-html
 
-cypress: ##3 Runs all Cypress tests (make cypress shopware=xyz)
-ifndef shopware
-	$(error Please provide the argument shopware=xyz to run the command)
-endif
+cypress: ##3 Runs all Cypress tests
 	cd ./tests/cypress && make install
-	cd ./tests/cypress && make start-env version=$(shopware)
+	cd ./tests/cypress && make start-env version=$(SW_VERSION)
 	sleep 10
-	cd ./tests/cypress && make run url=http://localhost shopware=$(shopware) || (make stop-env && false)
+	cd ./tests/cypress && make run url=http://localhost shopware=$(SW_VERSION) || (make stop-env && false)
