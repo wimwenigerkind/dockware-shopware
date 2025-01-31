@@ -29,7 +29,7 @@ ifndef version
 	$(error Please provide the argument version=xyz to run the command)
 endif
 	docker rm -f dev_cypress || true
-	docker run --rm -p 80:80 --name dev_cypress -d dockware/dev:$(version)
+	docker run --rm -p 80:80 --name dev_cypress -d dockware/shopware:$(version)
 
 stop-env: ##2 Stops the environment
 	docker stop dev_cypress

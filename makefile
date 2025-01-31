@@ -5,7 +5,11 @@
 # ----------------------------------------------------------------------------------------------------------------
 # ----------------------------------------------------------------------------------------------------------------
 # adjust the shopware version here!
+SW_IMAGE:=shopware
 SW_VERSION:=6.6.9.0
+
+ESSENTIALS_IMAGE:=shopware-essentials
+ESSENTIALS_VERSION:=1.0.0
 # ----------------------------------------------------------------------------------------------------------------
 # ----------------------------------------------------------------------------------------------------------------
 
@@ -37,19 +41,23 @@ clean: ##1 Clears all dependencies dangling images
 
 # ----------------------------------------------------------------------------------------------------------------
 
-all: ##2 Builds, Tests and Analyzes the image
-	make build
-	make svrunit
-	make cypress
-	make analyze
+essentials: ##2 Builds, Tests and Analyzes the essentials image
+	@cd ./src && DOCKER_BUILDKIT=1 docker build --squash --build-arg VERSION=none -t dockware/$(ESSENTIALS_IMAGE):$(ESSENTIALS_VERSION) .
+	make svrunit image=$(ESSENTIALS_IMAGE) tag=$(ESSENTIALS_VERSION)
+	make analyze image=$(ESSENTIALS_IMAGE) tag=$(ESSENTIALS_VERSION)
 
-build: ##2 Builds the image
-	@cd ./src && DOCKER_BUILDKIT=1 docker build --squash --build-arg VERSION=$(SW_VERSION) -t dockware/dev:$(SW_VERSION) .
+shopware: ##2 Builds, Tests and Analyzes the shopware image
+	@cd ./src && DOCKER_BUILDKIT=1 docker build --squash --build-arg VERSION=$(SW_VERSION) -t dockware/$(SW_IMAGE):$(SW_VERSION) .
+	make svrunit image=$(SW_IMAGE) tag=$(SW_VERSION)
+	make cypress shopware=$(SW_VERSION)
+	make analyze image=$(SW_IMAGE) tag=$(SW_VERSION)
+
+# ----------------------------------------------------------------------------------------------------------------
 
 analyze: ##2 Shows the size of the image
-	docker history --format "{{.CreatedBy}}\t\t{{.Size}}" dockware/dev:$(SW_VERSION) | grep -v "0B"
+	docker history --format "{{.CreatedBy}}\t\t{{.Size}}" dockware/$(image):$(tag) | grep -v "0B"
 	# --------------------------------------------------
-	docker save -o dev.tar dockware/dev:$(SW_VERSION)
+	docker save -o dev.tar dockware/$(image):$(tag)
 	gzip dev.tar
 	ls -lh dev.tar.gz
 	# --------------------------------------------------
@@ -58,11 +66,11 @@ analyze: ##2 Shows the size of the image
 
 # ----------------------------------------------------------------------------------------------------------------
 
-svrunit: ##3 Runs all SVRUnit tests
-	php ./vendor/bin/svrunit test --configuration=./tests/svrunit/shopware/shopware.xml --docker-tag=$(SW_VERSION) --debug --report-junit --report-html
+svrunit: ##3 Runs all SVRUnit tests (make svrunit image=shopware tag=x.x.x.x)
+	php ./vendor/bin/svrunit test --configuration=./tests/svrunit/suites/$(image).xml --docker-tag=$(tag) --debug --report-junit --report-html
 
 cypress: ##3 Runs all Cypress tests
 	cd ./tests/cypress && make install
-	cd ./tests/cypress && make start-env version=$(SW_VERSION)
+	cd ./tests/cypress && make start-env version=$(shopware)
 	sleep 10
-	cd ./tests/cypress && make run url=http://localhost shopware=$(SW_VERSION) || (make stop-env && false)
+	cd ./tests/cypress && make run url=http://localhost shopware=$(shopware) || (make stop-env && false)

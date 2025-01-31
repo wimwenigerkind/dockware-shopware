@@ -8,7 +8,7 @@ Welcome to Dockware! For more information, visit [dockware.io](https://dockware.
 
 <!-- TOC -->
 
-* [Dockware Dev](#dockware-dev)
+* [Dockware for Shopware 6](#dockware-for-shopware-6)
     * [What is Dockware Dev?](#what-is-dockware-dev)
     * [When to use this image?](#when-to-use-this-image)
         * [Versioning](#versioning)
@@ -42,31 +42,37 @@ Welcome to Dockware! For more information, visit [dockware.io](https://dockware.
 
 Our Dockware images are optimized Docker images for web development in general, but also for Symfony and Shopware projects.
 
-The **dev** image is a ready-to-use image when working with Shopware 6.
-It comes with an installed and prepared Shopware 6 instance, so you can immediately start developing.
-All required services such as MySQL, but also additional things like AdminerEVO, PimpMyLog, etc. are onboard.
+This repository contains the source code for 2 images **dockware/shopware** and **dockware/shopware-essentials**.
+It's a perfect match if you work with Shopware 6.
+
+While the **shopware-essentials** images comes with everything you need to run your own Shopware version inside a single container,
+the pure **shopware** images comes with an installed and prepared Shopware 6 instance, so you can immediately start developing.
+
+All required services such as MySQL, but also additional things like AdminerEVO, PimpMyLog, etc. are included in both images.
 Developers benefit from ready to use features like Xdebug, switching of PHP versions and Node versions and more.
 
 ## When to use this image?
 
-This image is a perfect fit for the following use cases.
+These images are a perfect fit for the following use cases.
 
 * Explore any Shopware 6 version
 * Develop Shopware 6 plugins, apps, themes
 * Use it in pipelines if you need an easy Shopware 6 instance for testing or more
 
-If you develop full Shopware 6 shops, we recommend either using the **essentials** image, or even the **flex** image, if you
+If you develop full Shopware 6 shops, we recommend either using the **shopware-essentials** image, or even the **dockware/web** image, if you
 know how to use Docker and want to fully rebuild your production environment locally.
 
 ### Versioning
 
-While we generally use semantic versioning for other images, this image is a bit different.
+While we generally use semantic versioning for other images, the **dockware/shopware** is a bit different.
 We try to use 1 image (name), and therefore we have to use the Docker tag to indicate the Shopware version.
 
 This also gives you the experience, that you can just write any supported Shopware 6 version as tag, without thinking,
 and you end up with the correct image and correct Shopware 6 version.
 
-The source code of the image is always the latest Shopware version.
+The **dockware/shopware-essentials** image is versioned with semantic versioning.
+
+The source code of the images, or more specifically the bundled Shopware image, is always the **latest Shopware version**.
 We use Git Tags to indicate releases (release-6.6.9.0).
 If an older Shopware version needs a fix, we will create a separate branch for this where we fix the issue and create a second tag (release-6.6.9.0-v2).
 
@@ -87,7 +93,7 @@ It usually just needs a few seconds after downloading the image.
 
 ```bash 
 # launch a Shopware available at http::/localhost
-docker run -p 80:80 dockware/dev:6.6.9.0
+docker run -p 80:80 dockware/shopware:6.6.9.0
 ```
 
 ### Docker Compose
@@ -99,7 +105,7 @@ In addition, it has **optional environment** variables for PHP and Node versions
 
 ```yaml
   shop:
-    image: dockware/dev:6.6.9.0
+    image: dockware/shopware:6.6.9.0
     ports:
       - 80:80
     environment:

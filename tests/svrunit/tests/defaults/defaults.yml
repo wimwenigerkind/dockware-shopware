@@ -71,13 +71,6 @@ commands:
     command: "sudo service mysql status"
     expected: "Slow queries:"
 
-  - name: "Shopware is decompressed and in DocRoot"
-    command: "ls -la /var/www/html"
-    expected: "vendor"
-
-  - name: "Shopware PHP CLI works"
-    command: "cd /var/www/html && php bin/console"
-    expected: "cache:clear"
 
 file_exists:
 
@@ -115,9 +108,6 @@ directory_exists:
     directory: "/var/www/pimpmylog"
     expected: 1
 
-  - name: "Dockware Sample Plugin exists"
-    directory: "/var/www/html/custom/plugins/DockwareSamplePlugin"
-    expected: 1
 
 file_content:
 

@@ -2,7 +2,7 @@
 # Copyright 2025 dasistweb GmbH
 #
 FROM ubuntu:22.04
-LABEL title="Dockware dev:latest" \
+LABEL title="Dockware image for Shopware" \
       maintainer="dasistweb GmbH"
 
 ARG VERSION
@@ -260,16 +260,17 @@ RUN echo "7:node" && \
 ##  SHOPWARE INSTALLATION
 ## ***********************************************************************
 RUN echo "8:shopware" && \
-    SW_VERSION=$(jq -r '.shopware' /dockware/tmp/config/variables.json) && \
-    cd /dockware/tmp/scripts && bash install_shopware.sh $SW_VERSION && \
-    tar -cf - -C /var/www/html . | zstd --ultra -22 -o /var/www/shopware.tar.zst && \
-    find /var/www/html -mindepth 1 -delete && \
-    # we need the zst in the html folder. if existing entrypoint.sh will decompress it \
-    # it has to be in html, because users might mount that folder, and if its not inside, it would \
-    # always exist and therefore always overwrite the users custom-mount html folder \
-    mv /var/www/shopware.tar.zst /var/www/html/shopware.tar.zst && \
+    SW_VERSION=$(cat /dockware/version.txt) && \
+    if [ "$SW_VERSION" != "none" ]; then \
+        cd /dockware/tmp/scripts && bash install_shopware.sh $SW_VERSION && \
+        tar -cf - -C /var/www/html . | zstd --ultra -22 -o /var/www/shopware.tar.zst && \
+        find /var/www/html -mindepth 1 -delete && \
+        # we need the zst in the html folder. if existing entrypoint.sh will decompress it \
+        # it has to be in html, because users might mount that folder, and if its not inside, it would \
+        # always exist and therefore always overwrite the users custom-mount html folder \
+        mv /var/www/shopware.tar.zst /var/www/html/shopware.tar.zst; \
+    fi; \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* && \
-
 
 ## ***********************************************************************
 ##  PERMISSIONS
