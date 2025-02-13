@@ -34,6 +34,11 @@
             <directory>../tests/features/tideways-on</directory>
         </testsuite>
 
+        <testsuite name="API Access Key can be set" group="features" dockerImage="dockware/shopware:{{tag}}" dockerEnv="SW_API_ACCESS_KEY=SWSCOVFSNKLBYUTKS1VSOEDGUQ">
+            <!-- just check if container starts up -->
+            <directory>../tests/defaults</directory>
+        </testsuite>
+
         <testsuite name="Timezone can be set" group="features" dockerImage="dockware/shopware:{{tag}}" dockerEnv="TZ=Asia/Tokyo">
             <directory>../tests/features/timezone</directory>
         </testsuite>

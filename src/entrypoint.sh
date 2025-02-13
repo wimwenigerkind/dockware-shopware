@@ -198,8 +198,6 @@ if [ $RECOVERY_MODE = 0 ]; then
       echo "-----------------------------------------------------------"
     fi
 
-
-
     if [ $FILEBEAT_ENABLED = 1 ]; then
        echo "DOCKWARE: activating Filebeat..."
        sudo service filebeat start --strict.perms=false
@@ -211,7 +209,6 @@ if [ $RECOVERY_MODE = 0 ]; then
          sudo service supervisor start
          echo "-----------------------------------------------------------"
     fi
-
 
     # before starting any commands
     # we always need to ensure we are back in our
