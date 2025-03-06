@@ -115,6 +115,10 @@ if [ $RECOVERY_MODE = 0 ]; then
         nohup sudo tideways-daemon --log=/var/log/tideways/daemon.log > /dev/null 2>&1 &
         ps aux | grep tideways-daemon
         echo "-----------------------------------------------------------"
+    else
+        echo "DOCKWARE: Tideways not activated. Disabling..."
+        sudo mv /etc/php/${CURRENT_PHP_VERSION}/fpm/conf.d/20-tideways.ini /etc/php/${CURRENT_PHP_VERSION}/fpm/conf.d/20-tideways.ini.disabled
+        sudo mv /etc/php/${CURRENT_PHP_VERSION}/cli/conf.d/20-tideways.ini /etc/php/${CURRENT_PHP_VERSION}/cli/conf.d/20-tideways.ini.disabled
     fi
 
     # --------------------------------------------------
