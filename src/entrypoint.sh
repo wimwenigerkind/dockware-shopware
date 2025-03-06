@@ -117,8 +117,8 @@ if [ $RECOVERY_MODE = 0 ]; then
         echo "-----------------------------------------------------------"
     else
         echo "DOCKWARE: Tideways not activated. Disabling..."
-        sudo mv /etc/php/${CURRENT_PHP_VERSION}/fpm/conf.d/20-tideways.ini /etc/php/${CURRENT_PHP_VERSION}/fpm/conf.d/20-tideways.ini.disabled
-        sudo mv /etc/php/${CURRENT_PHP_VERSION}/cli/conf.d/20-tideways.ini /etc/php/${CURRENT_PHP_VERSION}/cli/conf.d/20-tideways.ini.disabled
+        sudo mv /etc/php/${CURRENT_PHP_VERSION}/fpm/conf.d/20-tideways.ini /etc/php/${CURRENT_PHP_VERSION}/fpm/conf.d/20-tideways.disabled
+        sudo mv /etc/php/${CURRENT_PHP_VERSION}/cli/conf.d/20-tideways.ini /etc/php/${CURRENT_PHP_VERSION}/cli/conf.d/20-tideways.disabled
     fi
 
     # --------------------------------------------------
