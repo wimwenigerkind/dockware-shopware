@@ -1,5 +1,5 @@
-name: Release Image
-run-name: dockware/flex:${{ github.event.inputs.version }}, latest ${{ github.event.inputs.setLatest }}
+name: Release Essentials
+run-name: dockware/shopware-essentials:${{ github.event.inputs.version }}, latest ${{ github.event.inputs.setLatest }}
 
 on:
   workflow_dispatch:
