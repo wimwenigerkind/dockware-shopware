@@ -136,22 +136,28 @@ commands:
   cmd_install:
     steps:
       - restore_cache:
+          name: Restore Cache
           key: vendor-cache
           paths:
             - vendor
-      - run: |
-          sudo apt-get update
-          sudo apt-get install -y software-properties-common
-          sudo add-apt-repository ppa:ondrej/php -y
-          sudo apt-get update
-          sudo apt-get install -y php8.2 php8.2-cli php8.2-xml unzip
-          php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
-          php composer-setup.php
-          sudo mv composer.phar /usr/local/bin/composer
+      - run:
+          name: Install PHP 8.2 and Composer
+          command: |
+            sudo apt-get update
+            sudo apt-get install -y software-properties-common
+            sudo add-apt-repository ppa:ondrej/php -y
+            sudo apt-get update
+            sudo apt-get install -y php8.2 php8.2-cli php8.2-xml unzip
+            php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
+            php composer-setup.php
+            sudo mv composer.phar /usr/local/bin/composer
       # ------------------------------------------------------------------------------------
-      - run: |
-          make install
+      - run:
+          name: Install Dependencies
+          command: |
+            make install
       - save_cache:
+          name: Save Cache
           key: vendor-cache
           paths:
             - vendor
