@@ -33,7 +33,7 @@ ifndef tag
 	$(error Please provide the argument tag=xyz to run the command)
 endif
 	docker rm -f shopware_cypress || true
-	docker run --rm -p 80:80 --name shopware_cypress -d dockware/$(image):$(tag)
+	docker run --rm -p 1000:80 --name shopware_cypress -d dockware/$(image):$(tag)
 
 stop-env: ##2 Stops the environment
 	docker stop shopware_cypress

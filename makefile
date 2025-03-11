@@ -106,5 +106,5 @@ endif
 	# -------------------------------------------------------------------------
 	cd ./tests/cypress && make install
 	cd ./tests/cypress && make start-env image=shopware tag=$(tag)
-	sleep 10
-	cd ./tests/cypress && make run url=http://localhost shopware=$(SW_VERSION) || (make stop-env && false)
+	while ! curl -k -s -o /dev/null http://localhost:1000; do echo Waiting for dockware; sleep 1; done
+	cd ./tests/cypress && make run url=http://localhost:1000 shopware=$(CURRENT_SW_VERSION) || (make stop-env && false)
