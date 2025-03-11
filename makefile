@@ -5,14 +5,13 @@
 # ----------------------------------------------------------------------------------------------------------------
 # ----------------------------------------------------------------------------------------------------------------
 # adjust the shopware version here!
-SW_IMAGE:=shopware
-SW_VERSION:=6.6.9.0
+# this is the one, that will be installed in the shopware image
+# however, it the tag can still use "dev-main" as version for nightly builds while still this version is installed
+CURRENT_SW_VERSION:=6.6.10.2
 
-ESSENTIALS_IMAGE:=shopware-essentials
-ESSENTIALS_VERSION:=1.0.0
+
 # ----------------------------------------------------------------------------------------------------------------
 # ----------------------------------------------------------------------------------------------------------------
-
 
 help:
 	@echo "PROJECT COMMANDS"
@@ -23,8 +22,11 @@ help:
 	@printf "\033[36mDevelopment:%-30s\033[0m %s\n"
 	@grep -E '^[a-zA-Z_-]+:.*?##2 .*$$' $(firstword $(MAKEFILE_LIST)) | awk 'BEGIN {FS = ":.*?##2 "}; {printf "\033[36m  - %-30s\033[0m %s\n", $$1, $$2}'
 	@echo "--------------------------------------------------------------------------------------------"
+	@printf "\033[35mDevOps:%-30s\033[0m %s\n"
+	@grep -E '^[a-zA-Z_-]+:.*?##3 .*$$' $(firstword $(MAKEFILE_LIST)) | awk 'BEGIN {FS = ":.*?##3 "}; {printf "\033[35m  - %-30s\033[0m %s\n", $$1, $$2}'
+	@echo "--------------------------------------------------------------------------------------------"
 	@printf "\033[32mTests:%-30s\033[0m %s\n"
-	@grep -E '^[a-zA-Z_-]+:.*?##3 .*$$' $(firstword $(MAKEFILE_LIST)) | awk 'BEGIN {FS = ":.*?##3 "}; {printf "\033[32m  - %-30s\033[0m %s\n", $$1, $$2}'
+	@grep -E '^[a-zA-Z_-]+:.*?##4 .*$$' $(firstword $(MAKEFILE_LIST)) | awk 'BEGIN {FS = ":.*?##4 "}; {printf "\033[32m  - %-30s\033[0m %s\n", $$1, $$2}'
 
 # ----------------------------------------------------------------------------------------------------------------
 
@@ -41,20 +43,40 @@ clean: ##1 Clears all dependencies dangling images
 
 # ----------------------------------------------------------------------------------------------------------------
 
-essentials: ##2 Builds, Tests and Analyzes the essentials image with the version from the Makefile
-	@cd ./src && DOCKER_BUILDKIT=1 docker build --squash --build-arg VERSION=none -t dockware/$(ESSENTIALS_IMAGE):$(ESSENTIALS_VERSION) .
-	make svrunit image=$(ESSENTIALS_IMAGE) tag=$(ESSENTIALS_VERSION)
-	make analyze image=$(ESSENTIALS_IMAGE) tag=$(ESSENTIALS_VERSION)
+essentials: ##2 Dev-Helper that builds, tests and analyzes the image
+	@echo "Building: dockware/shopware-essentials:dev-main"
+	make build-essentials version=dev-main
+	make svrunit image=shopware-essentials tag=dev-main
+	make analyze image=shopware-essentials tag=dev-main
 
-shopware: ##2 Builds, Tests and Analyzes the Shopware image with the version from the Makefile
-	@cd ./src && DOCKER_BUILDKIT=1 docker build --squash --build-arg VERSION=$(SW_VERSION) -t dockware/$(SW_IMAGE):$(SW_VERSION) .
-	make svrunit image=$(SW_IMAGE) tag=$(SW_VERSION)
-	make cypress shopware=$(SW_VERSION)
-	make analyze image=$(SW_IMAGE) tag=$(SW_VERSION)
+shopware: ##2 Dev-Helper that builds, tests and analyzes the image
+	@echo "Building: dockware/shopware:dev-main"
+	make build-shopware version=dev-main
+	make svrunit image=shopware tag=dev-main
+	make cypress tag=dev-main
+	make analyze image=shopware tag=dev-main
 
 # ----------------------------------------------------------------------------------------------------------------
 
-analyze: ##2 Shows the size of the image
+build-essentials: ##3 Builds the Essentials image
+ifndef version
+	$(error Please provide the argument version=xyz to run the command)
+endif
+	@cd ./src && DOCKER_BUILDKIT=1 docker build --squash --build-arg VERSION=none -t dockware/shopware-essentials:$(version) .
+
+build-shopware: ##3 Builds the Shopware image
+ifndef version
+	$(error Please provide the argument version=xyz to run the command)
+endif
+	@cd ./src && DOCKER_BUILDKIT=1 docker build --squash --build-arg VERSION=$(CURRENT_SW_VERSION) -t dockware/shopware:$(version) .
+
+analyze: ##3 Shows the size of the image
+ifndef image
+	$(error Please provide the argument image=xyz to run the command)
+endif
+ifndef tag
+	$(error Please provide the argument tag=xyz to run the command)
+endif
 	docker history --format "{{.CreatedBy}}\t\t{{.Size}}" dockware/$(image):$(tag) | grep -v "0B"
 	# --------------------------------------------------
 	docker save -o dev.tar dockware/$(image):$(tag)
@@ -66,11 +88,20 @@ analyze: ##2 Shows the size of the image
 
 # ----------------------------------------------------------------------------------------------------------------
 
-svrunit: ##3 Runs all SVRUnit tests (make svrunit image=shopware tag=x.x.x.x)
+svrunit: ##4 Runs all SVRUnit tests against an image
+ifndef image
+	$(error Please provide the argument image=xyz to run the command)
+endif
+ifndef tag
+	$(error Please provide the argument tag=xyz to run the command)
+endif
 	php ./vendor/bin/svrunit test --configuration=./tests/svrunit/suites/$(image).xml --docker-tag=$(tag) --debug --report-junit --report-html
 
-cypress: ##3 Runs all Cypress tests
+cypress: ##4 Runs all Cypress tests for the Shopware image
+ifndef tag
+	$(error Please provide the argument tag=xyz to run the command)
+endif
 	cd ./tests/cypress && make install
-	cd ./tests/cypress && make start-env version=$(shopware)
+	cd ./tests/cypress && make start-env image=shopware tag=$(tag)
 	sleep 10
-	cd ./tests/cypress && make run url=http://localhost shopware=$(shopware) || (make stop-env && false)
+	cd ./tests/cypress && make run url=http://localhost shopware=$(CURRENT_SW_VERSION) || (make stop-env && false)
