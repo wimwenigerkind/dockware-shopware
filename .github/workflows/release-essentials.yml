@@ -1,14 +1,14 @@
-name: Release Image
-run-name: dockware/flex:${{ github.event.inputs.version }}, latest ${{ github.event.inputs.setLatest }}
+name: Release Essentials
+run-name: dockware/shopware-essentials:${{ github.event.inputs.version }}, latest ${{ github.event.inputs.setLatest }}
 
 on:
   workflow_dispatch:
     inputs:
       version:
-        description: 'Image Version'
+        description: 'Essentials Image Version'
         required: true
       setLatest:
-        description: 'Set Latest Tag'
+        description: 'Is this the latest version?'
         type: boolean
         required: true
 
@@ -22,10 +22,12 @@ jobs:
       - name: Clone Code
         uses: actions/checkout@v4
 
-      - name: Release Version ${{ github.event.inputs.swVersion }}
+      - name: Release Essentials ${{ github.event.inputs.swVersion }}
         uses: ./.github/actions/circleci
         with:
+          # -------------------------------------------
+          IMAGE: shopware-essentials
           VERSION: ${{ github.event.inputs.version }}
-          SET_LATEST: false
+          IS_LATEST: ${{ github.event.inputs.setLatest }}
           # -------------------------------------------
           CIRCLECI_KEY: ${{ secrets.CIRCLE_CI_TOKEN }}

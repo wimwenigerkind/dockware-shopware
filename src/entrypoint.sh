@@ -115,6 +115,14 @@ if [ $RECOVERY_MODE = 0 ]; then
         nohup sudo tideways-daemon --log=/var/log/tideways/daemon.log > /dev/null 2>&1 &
         ps aux | grep tideways-daemon
         echo "-----------------------------------------------------------"
+    else
+        echo "DOCKWARE: Tideways not activated. Disabling..."
+        if [ -f /etc/php/${CURRENT_PHP_VERSION}/fpm/conf.d/20-tideways.ini ]; then
+            sudo mv /etc/php/${CURRENT_PHP_VERSION}/fpm/conf.d/20-tideways.ini /etc/php/${CURRENT_PHP_VERSION}/fpm/conf.d/20-tideways.disabled
+        fi
+        if [ -f /etc/php/${CURRENT_PHP_VERSION}/cli/conf.d/20-tideways.ini ]; then
+            sudo mv /etc/php/${CURRENT_PHP_VERSION}/cli/conf.d/20-tideways.ini /etc/php/${CURRENT_PHP_VERSION}/cli/conf.d/20-tideways.disabled
+        fi
     fi
 
     # --------------------------------------------------
@@ -198,8 +206,6 @@ if [ $RECOVERY_MODE = 0 ]; then
       echo "-----------------------------------------------------------"
     fi
 
-
-
     if [ $FILEBEAT_ENABLED = 1 ]; then
        echo "DOCKWARE: activating Filebeat..."
        sudo service filebeat start --strict.perms=false
@@ -211,7 +217,6 @@ if [ $RECOVERY_MODE = 0 ]; then
          sudo service supervisor start
          echo "-----------------------------------------------------------"
     fi
-
 
     # before starting any commands
     # we always need to ensure we are back in our

@@ -41,12 +41,12 @@ clean: ##1 Clears all dependencies dangling images
 
 # ----------------------------------------------------------------------------------------------------------------
 
-essentials: ##2 Builds, Tests and Analyzes the essentials image
+essentials: ##2 Builds, Tests and Analyzes the essentials image with the version from the Makefile
 	@cd ./src && DOCKER_BUILDKIT=1 docker build --squash --build-arg VERSION=none -t dockware/$(ESSENTIALS_IMAGE):$(ESSENTIALS_VERSION) .
 	make svrunit image=$(ESSENTIALS_IMAGE) tag=$(ESSENTIALS_VERSION)
 	make analyze image=$(ESSENTIALS_IMAGE) tag=$(ESSENTIALS_VERSION)
 
-shopware: ##2 Builds, Tests and Analyzes the shopware image
+shopware: ##2 Builds, Tests and Analyzes the Shopware image with the version from the Makefile
 	@cd ./src && DOCKER_BUILDKIT=1 docker build --squash --build-arg VERSION=$(SW_VERSION) -t dockware/$(SW_IMAGE):$(SW_VERSION) .
 	make svrunit image=$(SW_IMAGE) tag=$(SW_VERSION)
 	make cypress shopware=$(SW_VERSION)
