@@ -176,7 +176,7 @@ commands:
           name: Build Image dockware/<< parameters.imageName >>:<< parameters.imageTag >>
           command: |
             if [ "<< parameters.imageName >>" = "shopware" ]; then
-                make build-shopware version=<< parameters.imageTag >> -B
+                make build-shopware tag=<< parameters.imageTag >> -B
             elif [ "<< parameters.imageName >>" = "shopware-essentials" ]; then
                 make build-essentials version=<< parameters.imageTag >> -B
             else

@@ -65,10 +65,10 @@ endif
 	@cd ./src && DOCKER_BUILDKIT=1 docker build --squash --build-arg VERSION=none -t dockware/shopware-essentials:$(version) .
 
 build-shopware: ##3 Builds the Shopware image
-ifndef version
-	$(error Please provide the argument version=xyz to run the command)
+ifndef tag
+	$(error Please provide the argument tag=xyz to run the command)
 endif
-	@cd ./src && DOCKER_BUILDKIT=1 docker build --squash --build-arg VERSION=$(CURRENT_SW_VERSION) -t dockware/shopware:$(version) .
+	@cd ./src && DOCKER_BUILDKIT=1 docker build --squash --build-arg VERSION=$(CURRENT_SW_VERSION) -t dockware/shopware:$(tag) .
 
 analyze: ##3 Shows the size of the image
 ifndef image
