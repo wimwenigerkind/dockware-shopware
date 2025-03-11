@@ -30,7 +30,7 @@ These images are a perfect fit for the following use cases.
 If you develop full Shopware 6 shops, we recommend either using the **shopware-essentials** image, or even the **dockware/web** image, if you
 know how to use Docker and want to fully rebuild your production environment locally.
 
-### Versioning
+## Versioning
 
 While we generally use semantic versioning for other images, the **dockware/shopware** is a bit different.
 We try to use 1 image (name), and therefore we have to use the Docker tag to indicate the Shopware version.
@@ -44,7 +44,7 @@ The source code of the images, or more specifically the bundled Shopware image, 
 We use Git Tags to indicate releases (release-6.6.9.0).
 If an older Shopware version needs a fix, we will create a separate branch for this where we fix the issue and create a second tag (release-6.6.9.0-v2).
 
-### Deprecations and Legacy services
+## Deprecations and Legacy services
 
 One thing that is important to us, is that we try to keep the image as slim as possible for developers.
 Therefore we only include things like PHP, Node, etc. in versions that are supported by the Shopware version of the image.
