@@ -58,19 +58,19 @@ shopware: ##2 Dev-Helper that builds, tests and analyzes the image
 
 # ----------------------------------------------------------------------------------------------------------------
 
-build-essentials: ##3 Builds the Essentials image
+build-essentials: ##3 Builds the Essentials image [version=x.y.z|dev-main]
 ifndef version
 	$(error Please provide the argument version=xyz to run the command)
 endif
 	@cd ./src && DOCKER_BUILDKIT=1 docker build --squash --build-arg VERSION=none -t dockware/shopware-essentials:$(version) .
 
-build-shopware: ##3 Builds the Shopware image
+build-shopware: ##3 Builds with the current Shopware version [tag=x.y.z|dev-main]
 ifndef tag
 	$(error Please provide the argument tag=xyz to run the command)
 endif
 	@cd ./src && DOCKER_BUILDKIT=1 docker build --squash --build-arg VERSION=$(CURRENT_SW_VERSION) -t dockware/shopware:$(tag) .
 
-analyze: ##3 Shows the size of the image
+analyze: ##3 Shows the size of the image [image=shopware|shopware-essentials, tag=x.y.z|dev-main]
 ifndef image
 	$(error Please provide the argument image=xyz to run the command)
 endif
@@ -88,7 +88,7 @@ endif
 
 # ----------------------------------------------------------------------------------------------------------------
 
-svrunit: ##4 Runs all SVRUnit tests against an image
+svrunit: ##4 Runs all SVRUnit tests against an image [image=shopware|shopware-essentials, tag=x.y.z|dev-main]
 ifndef image
 	$(error Please provide the argument image=xyz to run the command)
 endif
@@ -97,11 +97,14 @@ ifndef tag
 endif
 	php ./vendor/bin/svrunit test --configuration=./tests/svrunit/suites/$(image).xml --docker-tag=$(tag) --debug --report-junit --report-html
 
-cypress: ##4 Runs all Cypress tests for the Shopware image
+cypress: ##4 Runs all Cypress tests for the Shopware image [tag=x.y.z|dev-main]
 ifndef tag
 	$(error Please provide the argument tag=xyz to run the command)
 endif
+	# if tag is dev-main then expect our current SW version in the image with the provided tag
+	SW_VERSION=$(if $(filter dev-main,$(tag)),$(CURRENT_SW_VERSION),$(tag))
+	# -------------------------------------------------------------------------
 	cd ./tests/cypress && make install
 	cd ./tests/cypress && make start-env image=shopware tag=$(tag)
 	sleep 10
-	cd ./tests/cypress && make run url=http://localhost shopware=$(CURRENT_SW_VERSION) || (make stop-env && false)
+	cd ./tests/cypress && make run url=http://localhost shopware=$(SW_VERSION) || (make stop-env && false)
