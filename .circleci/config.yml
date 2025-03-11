@@ -141,7 +141,7 @@ commands:
           paths:
             - vendor
       - run:
-          name: Install PHP 8.2 and Composer
+          name: Install Build Environment
           command: |
             sudo apt-get update
             sudo apt-get install -y software-properties-common
@@ -153,7 +153,7 @@ commands:
             sudo mv composer.phar /usr/local/bin/composer
       # ------------------------------------------------------------------------------------
       - run:
-          name: Install Dependencies
+          name: Install Build Dependencies
           command: |
             make install
       - save_cache:
@@ -176,19 +176,32 @@ commands:
           name: Build Image dockware/<< parameters.imageName >>:<< parameters.imageTag >>
           command: |
             if [ "<< parameters.imageName >>" = "shopware" ]; then
-                make shopware version=<< parameters.imageTag >> -B
+                make build-shopware version=<< parameters.imageTag >> -B
             elif [ "<< parameters.imageName >>" = "shopware-essentials" ]; then
-                make essentials version=<< parameters.imageTag >> -B
+                make build-essentials version=<< parameters.imageTag >> -B
             else
                 echo "Invalid image name: << parameters.imageName >>"
                 exit 1
             fi
       # ------------------------------------------------------------------------------------
+      - run:
+          name: Run SVRUnit Tests
+          command: |
+            make svrunit version=<< parameters.imageTag >> -B
       - store_test_results:
           path: .reports
       - store_artifacts:
           path: .reports/report.xml
           destination: svrunit.xml
+      # ------------------------------------------------------------------------------------
+      - run:
+          name: Run Cypress Tests (Shopware only)
+          command: | 
+            if [ "<< parameters.imageName >>" = "shopware" ]; then
+                make cypress tag=<< parameters.imageTag >>
+            else
+                echo "Skipping Cypress Tests for: << parameters.imageName >>" 
+            fi
       # ------------------------------------------------------------------------------------
       - run:
           name: Docker Hub Login
