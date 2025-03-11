@@ -24,15 +24,19 @@ clean: ##1 Cleans all dependencies
 
 # ---------------------------------------------------------------------------------------------
 
-start-env: ##2 Starts the environment (make start-env version=xyz)
-ifndef version
-	$(error Please provide the argument version=xyz to run the command)
+
+start-env: ##2 Starts the environment
+ifndef image
+	$(error Please provide the argument image=xyz to run the command)
 endif
-	docker rm -f dev_cypress || true
-	docker run --rm -p 80:80 --name dev_cypress -d dockware/shopware:$(version)
+ifndef tag
+	$(error Please provide the argument tag=xyz to run the command)
+endif
+	docker rm -f shopware_cypress || true
+	docker run --rm -p 80:80 --name shopware_cypress -d dockware/$(image):$(tag)
 
 stop-env: ##2 Stops the environment
-	docker stop dev_cypress
+	docker stop shopware_cypress
 
 # ---------------------------------------------------------------------------------------------
 
@@ -42,7 +46,7 @@ ifndef url
 	@exit 1
 endif
 ifndef shopware
-	$(warning Please provide the shopware argument to Start Cypress!)
+	$(warning Please provide the shopware version argument to Start Cypress!)
 	@exit 1
 endif
 	CYPRESS_BASE_URL=$(url) CYPRESS_SHOPWARE=$(shopware) ./node_modules/.bin/cypress open --env conf=dev
@@ -53,7 +57,7 @@ ifndef url
 	@exit 1
 endif
 ifndef shopware
-	$(warning Please provide the shopware argument to Start Cypress!)
+	$(warning Please provide the shopware version argument to Start Cypress!)
 	@exit 1
 endif
 	CYPRESS_BASE_URL=$(url) CYPRESS_SHOPWARE=$(shopware) ./node_modules/.bin/cypress run --headless
