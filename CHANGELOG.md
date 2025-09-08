@@ -5,4 +5,4 @@ using the [Keep a CHANGELOG](https://keepachangelog.com/) principles.
 
 ## [unreleased]
 
-- Initial release 
+- Initial release (Ubuntu 24.04, PHP 8.2/8.3/8.4, Node 22/24)

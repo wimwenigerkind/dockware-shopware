@@ -1,7 +1,7 @@
 # Official Dockware Image
 # Copyright 2025 dasistweb GmbH
 #
-FROM ubuntu:22.04
+FROM ubuntu:24.04
 LABEL title="Dockware image for Shopware" \
       maintainer="dasistweb GmbH"
 

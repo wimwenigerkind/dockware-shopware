@@ -1,7 +1,7 @@
 commands:
-  - name: "Check Ubuntu 22.04"
+  - name: "Check Ubuntu 24.04"
     command: "lsb_release -a"
-    expected: "Ubuntu 22.04"
+    expected: "Ubuntu 24.04"
 
   - name: "SUDO is installed"
     command: "sudo"
@@ -19,9 +19,9 @@ commands:
     command: "vim --v"
     expected: "VIM - Vi IMproved"
 
-  - name: "zstd is installed"
+  - name: "Zstandard CLI is installed"
     command: "zstd --version"
-    expected: "*** zstd command line interface 64-bits v1.4.8, by Yann Collet ***"
+    expected: "by Yann Colle"
 
   - name: "Permission: Verify 'www-data' has no shell login"
     command: "cat /etc/passwd"
@@ -49,11 +49,11 @@ commands:
 
   - name: "GIT is installed"
     command: "git --version"
-    expected: "git version 2.34"
+    expected: "git version 2."
 
   - name: "GIT LFS is installed"
     command: "git lfs --version"
-    expected: "git-lfs/3.0.2 (GitHub"
+    expected: "git-lfs/3."
 
   - name: "Ubuntu timezone Europe/Berlin"
     command: "sudo cat /etc/timezone"
