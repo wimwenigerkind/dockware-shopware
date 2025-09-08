@@ -13,17 +13,20 @@ $newAccessKey = $argv[1];
  * Check if the prefix was provided, otherwise set it
  */
 $identifier = mb_substr($newAccessKey, 0, 4);
-if ($identifier != 'SWSC')
-{
+if ($identifier != 'SWSC') {
     $newAccessKey = 'SWSC' . $newAccessKey;
 }
 
 # ----------------------------------------------------------------------------
-$connString = "mysql://root:root@127.0.0.1:3306/shopware";
 
 $connection = DriverManager::getConnection([
-    'url' => $connString,
-    'charset' => 'utf8mb4',
+    "driver" => "pdo_mysql",
+    "host" => "127.0.0.1",
+    "port" => 3306,
+    "user" => "root",
+    "password" => "root",
+    "dbname" => "shopware",
+    "charset" => "utf8mb4"
 ], new Configuration()
 );
 
