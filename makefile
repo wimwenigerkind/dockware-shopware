@@ -7,7 +7,7 @@
 # adjust the shopware version here!
 # this is the one, that will be installed in the shopware image
 # however, it the tag can still use "dev-main" as version for nightly builds while still this version is installed
-CURRENT_SW_VERSION:=6.6.10.2
+CURRENT_SW_VERSION:=6.7.2.0
 
 
 # ----------------------------------------------------------------------------------------------------------------
@@ -38,6 +38,7 @@ install: ##1 Installs all dependencies
 clean: ##1 Clears all dependencies dangling images
 	rm -rf vendor/*
 	rm -rf node_modules/*
+	cd tests/cypress && make clean
 	docker images -aq -f 'dangling=true' | xargs docker rmi
 	docker volume ls -q -f 'dangling=true' | xargs docker volume rm
 
@@ -51,7 +52,7 @@ essentials: ##2 Dev-Helper that builds, tests and analyzes the image
 
 shopware: ##2 Dev-Helper that builds, tests and analyzes the image
 	@echo "Building: dockware/shopware:dev-main"
-	make build-shopware version=dev-main
+	make build-shopware tag=dev-main
 	make svrunit image=shopware tag=dev-main
 	make cypress tag=dev-main
 	make analyze image=shopware tag=dev-main
