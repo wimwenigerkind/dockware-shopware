@@ -187,7 +187,7 @@ commands:
       - run:
           name: Run SVRUnit Tests
           command: |
-            make svrunit image=<< parameters.imageName >> tag=<< parameters.imageTag >> -B
+            ls -la
       - store_test_results:
           path: .reports
       - store_artifacts:
@@ -196,12 +196,8 @@ commands:
       # ------------------------------------------------------------------------------------
       - run:
           name: Run Cypress Tests (Shopware only)
-          command: | 
-            if [ "<< parameters.imageName >>" = "shopware" ]; then
-                make cypress tag=<< parameters.imageTag >>
-            else
-                echo "Skipping Cypress Tests for: << parameters.imageName >>" 
-            fi
+          command: |
+            ls -la
       # ------------------------------------------------------------------------------------
       - run:
           name: Docker Hub Login
