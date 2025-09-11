@@ -16,7 +16,7 @@ sudo service mysql start
 sudo update-alternatives --set php /usr/bin/php8.3 > /dev/null 2>&1
 # -------------------------------------------------------------------------------------------
 rm -rf /var/www/html
-cd /var/www && composer create-project shopware/production:"$SHOPWARE_VERSION" --no-interaction html
+cd /var/www && composer create-project shopware/production:"$SHOPWARE_VERSION" --no-interaction --no-cache html
 cd /var/www/html && composer require --dev shopware/dev-tools
 # -------------------------------------------------------------------------------------------
 # ALWAYS UPDATE .env itself
