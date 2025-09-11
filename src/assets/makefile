@@ -38,8 +38,8 @@ endif
 	@# ---------------------------------------------------------------------------------------
 	@# if that all worked, switch the apache config now...that avoids breaking the files
 	@# pipe the first command to dev/null to avoid ugly warnings in entrypoint boot script if old placeholder does not exist anymore
-	sudo sed -i 's/__dockware_php_version__/'$(version)'/g' /etc/apache2/sites-enabled/000-default.conf 2>/dev/null
-	sudo sed -i 's/'php$(PHP_VERSION_CURRENT)-fpm.sock'/'php$(version)-fpm.sock'/g' /etc/apache2/sites-enabled/000-default.conf
+	sudo sed -i 's/__dockware_php_version__/'$(version)'/g' /etc/apache2/sites-enabled/000-default.conf 2>/dev/null >/dev/null 2>&1
+	sudo sed -i 's/'php$(PHP_VERSION_CURRENT)-fpm.sock'/'php$(version)-fpm.sock'/g' /etc/apache2/sites-enabled/000-default.conf >/dev/null 2>&1
 	sudo service apache2 restart
 	@# ---------------------------------------------------------------------------------------
 	@# last but not least update php for cli -> this is used for our variable in here
@@ -68,6 +68,12 @@ restart-php: ##1 Restarts FPM and Apache2
 	sudo service apache2 restart
 
 # -------------------------------------------------------------------------------------------------
+
+watch-admin: ##2 Starts the Admin Watcher (Port 5173 required)
+	cd /var/www/html && ADMIN_PORT=5173 ./bin/watch-administration.sh
+
+watch-storefront: ##2 Starts the Storefront Watcher
+	cd /var/www/html && VITE_EXTENSIONS_SERVER_HOST=localhost VITE_EXTENSIONS_SERVER_SCHEME=http ./bin/watch-storefront.sh
 
 xdebug-on: ##2 Enables Xdebug
 	sh /var/www/scripts/bin/xdebug_enable.sh
