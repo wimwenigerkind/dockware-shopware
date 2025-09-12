@@ -1,0 +1,27 @@
+name: Nightly Build (Shopware)
+run-name: dockware/shopware:dev-main
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 1 * * *"
+
+jobs:
+
+  on-push:
+    name: Release Image
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Clone Code
+        uses: actions/checkout@v4
+
+      - name: Release Essentials dev-main
+        uses: ./.github/actions/circleci
+        with:
+          # -------------------------------------------
+          IMAGE: shopware
+          VERSION: dev-main
+          IS_LATEST: false
+          # -------------------------------------------
+          CIRCLECI_KEY: ${{ secrets.CIRCLE_CI_TOKEN }}
