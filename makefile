@@ -44,13 +44,13 @@ clean: ##1 Clears all dependencies dangling images
 
 # ----------------------------------------------------------------------------------------------------------------
 
-essentials: ##2 Dev-Helper that builds, tests and analyzes the image
+dev-essentials: ##2 Dev-Helper that builds, tests and analyzes the image
 	@echo "Building: dockware/shopware-essentials:dev-main"
 	make build-essentials version=dev-main
 	make svrunit image=shopware-essentials tag=dev-main
 	make analyze image=shopware-essentials tag=dev-main
 
-shopware: ##2 Dev-Helper that builds, tests and analyzes the image
+dev-shopware: ##2 Dev-Helper that builds, tests and analyzes the image
 	@echo "Building: dockware/shopware:dev-main"
 	make build-shopware tag=dev-main
 	make svrunit image=shopware tag=dev-main
