@@ -1,8 +1,8 @@
 # Dockware for Shopware
 
-[![MIT licensed](https://img.shields.io/github/license/dockware/dockware.svg?style=flat-square)](https://github.com/dockware/dockware/blob/master/LICENSE)
-![Docker Pulls](https://img.shields.io/docker/pulls/dockware/flex)
-![Docker Image Size](https://img.shields.io/docker/image-size/dockware/flex)
+[![MIT licensed](https://img.shields.io/github/license/dockware/shopware.svg?style=flat-square)](https://github.com/dockware/dockware/blob/master/LICENSE)
+![Docker Pulls](https://img.shields.io/docker/pulls/dockware/shopware)
+![Docker Image Size](https://img.shields.io/docker/image-size/dockware/shopware)
 
 Welcome to Dockware! For more information, visit [dockware.io](https://dockware.io).
 
