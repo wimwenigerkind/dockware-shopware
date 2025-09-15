@@ -70,9 +70,9 @@ restart-php: ##1 Restarts FPM and Apache2
 # -------------------------------------------------------------------------------------------------
 
 watch-admin: ##2 Starts the Admin Watcher (Port 5173 required)
-	cd /var/www/html && ADMIN_PORT=5173 ./bin/watch-administration.sh
+	cd /var/www/html && HOST=0.0.0.0 ./bin/watch-administration.sh
 
-watch-storefront: ##2 Starts the Storefront Watcher
+watch-storefront: ##2 Starts the Storefront Watcher (Port 9998 for Storefront and 9999 for Assets/Styles)
 	cd /var/www/html && VITE_EXTENSIONS_SERVER_HOST=localhost VITE_EXTENSIONS_SERVER_SCHEME=http ./bin/watch-storefront.sh
 
 xdebug-on: ##2 Enables Xdebug
