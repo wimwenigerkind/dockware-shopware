@@ -84,6 +84,26 @@ In addition, it has **optional environment** variables for PHP and Node versions
       - NODE_VERSION=20
 ```
 
+### Watchers
+
+You can easily start the watchers for Shopware by using our predefined **makefile commands**.
+First make sure to expose the required ports 5173 for Admin and 9999/9998 for Storefront.
+You can do all 3 of them, or just expose what you need.
+
+```bash
+docker run -p 80:80 -p 5173:5173 -p 9999:9999 -p 9998:9998 dockware/shopware:6.7.2.0
+```
+
+Then connect into your container and open the makefile in **/var/www**.
+Type in "make" and press ENTER to see all available commands.
+
+```bash
+# starts admin watcher
+make watch-admin
+# starts storefront watcher
+make watch-storefront
+```
+
 ## Documentation
 
 For all these cool features like Xdebug, Filebeat, PHP Switching, Supervisor and more,
