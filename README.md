@@ -48,11 +48,11 @@ The source code in this repository is always the **latest Shopware version**.
 
 We use Git Tags to indicate releases.
 
-Shopware versions will get tags based on the Shopware version and this pattern: `sw-6.7.2.1`.
+**Shopware versions** will get tags based on the Shopware version and this pattern: `sw-6.7.2.1`.
 
-If an older Shopware version needs a fix, we will create a separate branch for this where we fix the issue and create a second tag (sw-6.6.0.0-v2).
+If an older Shopware version needs a fix, we will create a separate branch for this where we fix the issue and create a second tag like `sw-6.6.0.0-v2`.
 
-The shopware-essentials image will get tags like `essentials-1.0.0` and more.
+The **shopware-essentials** image will get tags like `essentials-1.0.0` and more.
 
 Please keep in mind, that we try to avoid rebuilding existing Shopware versions.
 Therefore, the used essentials version (operating system stuff) is the one that was available at the time of the build.
