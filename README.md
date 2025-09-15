@@ -38,11 +38,14 @@ We try to use 1 image (name), and therefore we have to use the Docker tag to ind
 This also gives you the experience, that you can just write any supported Shopware 6 version as tag, without thinking,
 and you end up with the correct image and correct Shopware 6 version.
 
-The **dockware/shopware-essentials** image is versioned with semantic versioning.
+The **dockware/shopware-essentials** image is versioned with semantic versioning 
+and will only be updated if relevant changes are made in the operating system or packages.
 
 The source code in this repository is always the **latest Shopware version**.
-We use Git Tags to indicate releases (release-6.6.9.0).
-If an older Shopware version needs a fix, we will create a separate branch for this where we fix the issue and create a second tag (release-6.6.9.0-v2).
+We use Git Tags to indicate releases (sw-6.7.2.1).
+If an older Shopware version needs a fix, we will create a separate branch for this where we fix the issue and create a second tag (sw-6.7.2.1-v2).
+
+The shopware-essentials image will get tags like "essentials-1.0.0" and more.
 
 ## Deprecations and Legacy services
 
