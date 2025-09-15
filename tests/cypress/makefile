@@ -38,7 +38,7 @@ endif
 	docker exec shopware_cypress bash -c "mysql -h 127.0.0.1 -u root -proot shopware -e \"UPDATE sales_channel_domain SET url = CONCAT(url, ':1000') WHERE url LIKE 'http://localhost%';\""
 
 stop-env: ##2 Stops the environment
-	docker stop shopware_cypress
+	docker rm -f shopware_cypress || true
 
 # ---------------------------------------------------------------------------------------------
 
