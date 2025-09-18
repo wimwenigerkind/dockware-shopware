@@ -25,11 +25,16 @@ set -e
 
 
 
-echo "DOCKWARE: decompressing NVM..."
-sudo zstd -d /var/www/nvm.tar.zst -o /var/www/nvm.tar
-sudo tar -xf /var/www/nvm.tar -C /var/www/.nvm
-sudo rm /var/www/nvm.tar.zst /var/www/nvm.tar
-sudo chown 33:33 /var/www/.nvm -R
+if [ -f "/var/www/nvm.tar.zst" ] && [ ! -d "/var/www/.nvm/versions" ]; then
+    echo "DOCKWARE: decompressing NVM..."
+    sudo zstd -d /var/www/nvm.tar.zst -o /var/www/nvm.tar
+    sudo tar -xf /var/www/nvm.tar -C /var/www/.nvm
+    sudo rm /var/www/nvm.tar.zst /var/www/nvm.tar
+    sudo chown 33:33 /var/www/.nvm -R
+    echo "DOCKWARE: NVM decompression completed successfully"
+else
+    echo "DOCKWARE: NVM already available or source missing, skipping decompression..."
+fi
 
 source /etc/apache2/envvars
 source /var/www/.bashrc
@@ -141,7 +146,16 @@ if [ $RECOVERY_MODE = 0 ]; then
         sudo zstd -d $swCompressedFile -o /var/www/html/shopware.tar
         sudo tar -xf /var/www/html/shopware.tar -C /var/www/html
         sudo rm $swCompressedFile /var/www/html/shopware.tar
-        sudo chown 33:33 /var/www/html -R
+        echo "DOCKWARE: setting web server permissions (preserving .git directories)..."
+        # Use rsync for fast selective ownership changes, excluding .git directories
+        if command -v rsync >/dev/null 2>&1; then
+            sudo rsync -a --chown=33:33 --exclude='.git' --exclude='**/.git' /var/www/html/ /var/www/html/
+        else
+            # Fallback to original method if rsync not available
+            sudo chown 33:33 /var/www/html -R
+            find /var/www/html -type d -name ".git" -exec sudo chown -R $(stat -c %u:%g /var/www/html) {} \; 2>/dev/null || true
+        fi
+        echo "DOCKWARE: web server permissions set successfully"
     fi
 
     # --------------------------------------------------
