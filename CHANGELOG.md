@@ -13,6 +13,7 @@ contain these changes.
 ### Added
 
 - Add conditional NVM decompression to prevent restart failures (thx @susannekoerber)
+- Add "patch" package to support Composer Patching vendors. 
 
 ### Changed
 

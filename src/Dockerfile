@@ -108,7 +108,7 @@ RUN echo "2:basics" && \
             rsync \
             supervisor \
             jpegoptim \
-            git git-lfs \
+            git git-lfs patch \
             apache2 libapache2-mod-fcgid  \
             tideways-php tideways-daemon \
             mysql-server-8.0 mysql-client \

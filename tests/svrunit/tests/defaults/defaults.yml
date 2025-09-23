@@ -71,6 +71,9 @@ commands:
     command: "sudo service mysql status"
     expected: "Slow queries:"
 
+  - name: "GIT Patch is installed"
+    command: "dpkg -l | grep patch"
+    expected: "Apply a diff file to an original"
 
 file_exists:
 
